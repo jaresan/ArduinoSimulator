@@ -15,6 +15,6 @@ function* somethingSaga() {
 
 export default function* root() {
   yield [
-    fork(somethingSaga),
+    fork(somethingSaga)
   ];
 }
