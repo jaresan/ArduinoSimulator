@@ -1,6 +1,3 @@
-export const namespace = 'Robot';
-export const actions = {
-  changePosition: (dX, dY) => {
-    return {dX, dY};
-  }
-};
+import { createAction } from './actionTypes';
+
+export const changePosition = createAction((dX, dY) => ({dX, dY}), 'Robot.changePosition');

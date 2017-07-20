@@ -36,10 +36,11 @@ class Simulator extends Component {
       <div>
         <button
           onClick={() => {
-            console.log('clicked madafaka');
-            this.props.actionerino(this.props.lol);
+            console.log(this.props.lol);
+            this.props.actionerino(1, 2);
+            this.props.actionerino2(2, 1, 3);
           }}
-        >{this.props.wtf ? 1 : 0}</button>
+        >Click me!</button>
         <Canvas/>
       </div>
     );
@@ -50,5 +51,7 @@ const mapStateToProps = appState => ({
   lol: appState
 });
 
-console.log(Actions);
-export default connect(mapStateToProps, {actionerino: Actions.Robot.changePosition})(Simulator);
+export default connect(mapStateToProps, {
+  actionerino: Actions.Robot.changePosition,
+  actionerino2: Actions.World.changePosition
+})(Simulator);

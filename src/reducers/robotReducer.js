@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable';
-import { actions as RobotActions } from 'actions/robotActions';
+import { changePosition } from 'actions/robotActions';
 
 export const initialState = fromJS({});
 
@@ -10,9 +10,9 @@ export default (state = initialState, action) => {
   } = action;
 
   switch (type) {
-    case RobotActions.changePosition:
-      console.log('hovnooo');
-      return state;
+    case changePosition.type:
+      console.log('TY PICO');
+      return state.set('wtf', true);
 
     default:
       return state;
