@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
-import worldReducer from './worldReducer';
-import simulatorReducer from './simulatorReducer';
-import robotReducer from './robotReducer';
+import worldReducer, { initialState as worldInitialState } from './worldReducer';
+import simulatorReducer, { initialState as simulatorInitialState } from './simulatorReducer';
+import robotReducer, { initialState as robotInitialState } from './robotReducer';
 
 const rootReducer = combineReducers({
   routing: routerReducer,
@@ -10,5 +10,11 @@ const rootReducer = combineReducers({
   simulator: simulatorReducer,
   world: worldReducer
 });
+
+export const initialStates = {
+  robot: robotInitialState,
+  world: worldInitialState,
+  simulator: simulatorInitialState
+};
 
 export default rootReducer;

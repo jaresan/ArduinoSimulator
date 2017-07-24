@@ -1,18 +1,17 @@
 import { createStore, applyMiddleware } from 'redux';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { browserHistory } from 'react-router';
-import { fromJS } from 'immutable';
 
 import createSagaMiddleware from 'redux-saga';
 import mySaga from './sagas/sagas';
 
-import rootReducer from './reducers/index';
+import rootReducer, { initialStates } from './reducers/index';
 
 const defaultState = {
-  robot: fromJS({}),
+  robot: initialStates.robot,
   routing: {},
-  simulator: fromJS({}),
-  world: fromJS({})
+  simulator: initialStates.simulator,
+  world: initialStates.world
 };
 
 const sagaMiddleware = createSagaMiddleware();
