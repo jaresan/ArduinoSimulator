@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 
 import { Provider } from 'react-redux';
 
-import Routes from './routes';
 import Simulator from 'components/Simulator/Simulator';
 import store from './store';
 
@@ -13,7 +12,7 @@ const app = (
     <div>
       {/*<Routes />*/}
       <Simulator
-        width={2000}
+        width={1500}
       />
     </div>
   </Provider>

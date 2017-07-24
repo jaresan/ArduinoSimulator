@@ -4,10 +4,9 @@ import { connect } from 'react-redux';
 import { s_loadImage } from 'actions/simulatorActions';
 import Track from 'assets/track.png';
 
-import * as SimulatorSelectors from 'selectors/simulatorSelectors';
-import * as Settings from 'constants/WorldSettings';
+import { getRobot, getWorld } from 'selectors';
 
-import './Simulator.less';
+import './Simulator.css';
 
 class Simulator extends Component {
 
@@ -48,52 +47,10 @@ class Simulator extends Component {
 
   }
 
-  /**
-   * Converts real world coordinates (specified in meters) to pixel world representation.
-   *
-   * @param x X coord in real world in metres.
-   * @param y Y coord in real world in metres.
-   * @param radius rotation in degrees
-   */
-  convertWorldCoordsToFieldCoords(x, y, radius) {
-    x = x * Settings.PIXELS_PER_M;
-    y = y * Settings.PIXELS_PER_M;
-    radius = radius * Settings.PIXELS_PER_M;
-
-    return {x, y, radius};
-  }
-
-  /**
-   * Returns true if the line can be seen from specified position in the given radius.
-   *
-   * @param x X coordinate in real world in metres.
-   * @param y Y coordinate in real world in metres.
-   * @param radius Radius in which to search in metres.
-   * @returns {boolean}
-   */
-  canSeeLine(x, y, radius) {
-    let {x: newX, y: newY, radius: newRadius} = this.convertWorldCoordsToFieldCoords(x, y, radius);
-    newX = Math.round(newX);
-    newY = Math.round(newY);
-
-    let lineSeen = false;
-    for (let i = 0; i <= newRadius; i++) {
-      for (let j = 0; j <= newRadius; j++) {
-        if (newX + j < this.field.length && newY + i < this.field[0].length) {
-          if (this.field[newX + j]) {
-            lineSeen = this.field[newX + j][newY + i] || lineSeen;
-          }
-        }
-      }
-    }
-
-    return lineSeen;
-  }
-
   render() {
     let toRender;
 
-    const {robot, world} = this.props;
+    const {world} = this.props;
 
     if (world.get('pixels')) {
       toRender = <Canvas
@@ -108,7 +65,7 @@ class Simulator extends Component {
     }
 
     return (
-      <div>
+      <div className="Simulator">
         {toRender}
       </div>
     );
@@ -116,8 +73,8 @@ class Simulator extends Component {
 }
 
 const mapStateToProps = appState => ({
-  robot: SimulatorSelectors.getRobot(appState),
-  world: SimulatorSelectors.getWorld(appState)
+  robot: getRobot(appState),
+  world: getWorld(appState)
 });
 
 const mapDispatchToProps = {

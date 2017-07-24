@@ -1,3 +1,4 @@
 import { createAction } from './utils';
 
-export const changePosition = createAction((dX, dY) => ({dX, dY}), 'Robot.changePosition');
+export const setSpeedCoeff = createAction((left, right) => ({left, right}), 'Robot.setSpeedCoeff');
+export const tick = createAction(duration => ({duration}), 'Robot.tick');

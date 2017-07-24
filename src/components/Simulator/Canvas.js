@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import * as Settings from 'constants/WorldSettings';
+import * as Settings from 'constants/world';
+
+import './Canvas.css';
 
 class Canvas extends Component {
 
@@ -82,13 +84,15 @@ class Canvas extends Component {
   }
 
   render() {
-    return <div className="canvasContainer">
-      <canvas
-      ref='canvas'
-      width={this.props.width}
-      height={this.props.height}
-      />
-    </div>;
+    return (
+      <div className="canvasContainer">
+        <canvas
+          ref='canvas'
+          width={this.props.width}
+          height={this.props.height}
+        />
+      </div>
+    );
   }
 }
 
