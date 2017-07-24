@@ -1,3 +1,3 @@
-import { createAction } from './actionTypes';
+import { createAction } from './utils';
 
-export const changePosition = createAction((dX, dY) => ({dX, dY}));
+export const r_setImageData = createAction(({imageData, realWorldWidth, realWorldHeight}) => ({imageData, realWorldWidth, realWorldHeight}));

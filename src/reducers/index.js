@@ -8,7 +8,7 @@ const rootReducer = combineReducers({
   routing: routerReducer,
   robot: robotReducer,
   simulator: simulatorReducer,
-  world: worldReducer,
+  world: worldReducer
 });
 
 export default rootReducer;

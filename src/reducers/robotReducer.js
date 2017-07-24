@@ -1,7 +1,8 @@
 import { fromJS } from 'immutable';
 import { changePosition } from 'actions/robotActions';
+import RobotParams from 'constants/RobotParams'
 
-export const initialState = fromJS({});
+export const initialState = fromJS({}).merge(RobotParams);
 
 export default (state = initialState, action) => {
   const {
@@ -11,8 +12,12 @@ export default (state = initialState, action) => {
 
   switch (type) {
     case changePosition.type:
-      console.log('TY PICO');
-      return state.set('wtf', true);
+      return state.update('position', p => {
+        return {
+          x: p.x + payload.dX,
+          y: p.y + payload.dY
+        }
+      });
 
     default:
       return state;
