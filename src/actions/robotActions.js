@@ -1,4 +1,3 @@
 import { createAction } from './utils';
 
-export const setSpeedCoeff = createAction((left, right) => ({left, right}), 'Robot.setSpeedCoeff');
-export const tick = createAction(duration => ({duration}), 'Robot.tick');
+export const r_tick = createAction((field, duration) => ({field, duration}), 'r_Robot.tick');

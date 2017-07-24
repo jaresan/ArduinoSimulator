@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import Canvas from './Canvas';
 import { connect } from 'react-redux';
 import { s_loadImage } from 'actions/simulatorActions';
-import Track from 'assets/track.png';
+import { r_tick } from 'actions/robotActions';
 
 import { getRobot, getWorld } from 'selectors';
 
+import Track from 'assets/track.png';
 import './Simulator.css';
 
 class Simulator extends Component {
@@ -52,10 +53,9 @@ class Simulator extends Component {
 
     const {world} = this.props;
 
-    if (world.get('pixels')) {
+    if (world.get('pixels').length > 0) {
       toRender = <Canvas
         robot={this.props.robot}
-        world={this}
         field={world.get('pixels')}
         width={world.get('width')}
         height={world.get('height')}
@@ -66,6 +66,14 @@ class Simulator extends Component {
 
     return (
       <div className="Simulator">
+        <button
+          onClick={() => {
+            console.log(this.props.robot.toJS());
+            this.props.tick(world.get('pixels'));
+          }}
+        >
+          CLICK MEEEE!!!
+        </button>
         {toRender}
       </div>
     );
@@ -78,7 +86,8 @@ const mapStateToProps = appState => ({
 });
 
 const mapDispatchToProps = {
-  loadImage: s_loadImage
+  loadImage: s_loadImage,
+  tick: r_tick
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Simulator);

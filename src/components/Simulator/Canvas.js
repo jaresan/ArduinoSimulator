@@ -17,7 +17,7 @@ class Canvas extends Component {
     this.updateCanvas();
   }
 
-  shouldComponentUpdate() {
+  componentDidUpdate() {
     this.updateCanvas();
   }
 
@@ -70,10 +70,7 @@ class Canvas extends Component {
     // restore the context to its untranslated/unrotated state
     ctx.restore();
 
-    const sensors = robot.sensorDeltas.map(([deltaX, deltaY]) => {
-      const [x, y] = robot.getSensorPosition(deltaX, deltaY);
-      return this.props.world.convertWorldCoordsToFieldCoords(x, y);
-    });
+    const sensors = robot.get('sensorPositions');
 
     sensors.forEach(coords => {
       ctx.fillStyle = 'rgba(10, 50, 200, 100)';
@@ -98,7 +95,6 @@ class Canvas extends Component {
 
 Canvas.propTypes = {
   robot: PropTypes.object.isRequired,
-  world: PropTypes.object.isRequired,
   field: PropTypes.array.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired

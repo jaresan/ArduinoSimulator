@@ -1,9 +1,9 @@
 import { fromJS } from 'immutable';
 import { r_setImageData } from 'actions/worldActions';
 
-import Settings from 'constants/world';
+import * as Settings from 'constants/world';
 
-const initialState = fromJS({
+export const initialState = fromJS({
   pixels: [],
   width: 0,
   height: 0
