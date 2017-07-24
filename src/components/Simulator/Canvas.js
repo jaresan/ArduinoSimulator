@@ -15,7 +15,7 @@ class Canvas extends Component {
     this.updateCanvas();
   }
 
-  componentShouldUpdate() {
+  shouldComponentUpdate() {
     this.updateCanvas();
   }
 

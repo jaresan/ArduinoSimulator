@@ -1,3 +1,3 @@
 import { createAction } from './utils';
 
-export const r_setImageData = createAction(({imageData, realWorldWidth, realWorldHeight}) => ({imageData, realWorldWidth, realWorldHeight}));
+export const r_setImageData = createAction(({width, height, pixels}) => ({width, height, pixels}));

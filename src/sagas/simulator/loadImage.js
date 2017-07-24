@@ -28,13 +28,10 @@ function* loadImage({payload: {img, targetWidth, realWorldWidth, realWorldHeight
   }
 
   yield put(r_setImageData({
-    realWorldWidth,
-    realWorldHeight,
-    imageData: {
       pixels: pixelArr,
-      width: imageData.width,
-      height: imageData.height
-    }}));
+      width: canvas.width,
+      height: canvas.height
+    }));
 }
 
 export default function* loadImageSaga() {

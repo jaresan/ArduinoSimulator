@@ -13,7 +13,7 @@ const app = (
     <div>
       {/*<Routes />*/}
       <Simulator
-        width={1000}
+        width={2000}
       />
     </div>
   </Provider>
