@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { convertWorldCoordsToFieldCoords } from 'reducers/worldReducer';
 
 import * as Settings from 'constants/world';
 
@@ -8,12 +9,13 @@ import './Canvas.css';
 class Canvas extends Component {
 
   updateCanvas() {
-    const ctx = this.refs.canvas.getContext('2d');
-    this.drawTrack(ctx);
-    // this.drawRobot(ctx);
+    const ctx = this.refs.robotCanvas.getContext('2d');
+    this.drawRobot(ctx);
   }
 
   componentDidMount() {
+    const ctx = this.refs.trackCanvas.getContext('2d');
+    this.drawTrack(ctx);
     this.updateCanvas();
   }
 
@@ -39,52 +41,68 @@ class Canvas extends Component {
     }
   }
 
-
-  drawRobot(ctx) {
+  drawRobotSensors(ctx) {
+    ctx.save();
     const robot = this.props.robot;
+    const sensors = robot.get('sensorPositions');
 
-    const {x, y} = this.props.convertWorldCoordsToFieldCoords(
+    sensors.forEach(([x, y]) => {
+      const pos = convertWorldCoordsToFieldCoords(x, y);
+      ctx.rect(pos.x, pos.y, 4, 4);
+    });
+
+    ctx.fill();
+    ctx.restore();
+  }
+
+  drawRobotBody(ctx) {
+    ctx.save();
+    const robot = this.props.robot;
+    const {x, y} = convertWorldCoordsToFieldCoords(
       robot.getIn(['position', 'x']),
       robot.getIn(['position', 'y'])
     );
-
-    ctx.fillStyle = 'rgba(150, 0, 0, 100)';
-
-    // first save the untranslated/unrotated context
-    ctx.save();
 
     ctx.beginPath();
     // move the rotation point to the center of the rect
     ctx.translate(x, y);
     // rotate the rect
-    ctx.rotate(robot.rotation * Math.PI / 180);
+    ctx.rotate(robot.get('rotation') * Math.PI / 180);
 
     // draw the rect on the transformed context
     // Note: after transforming [0,0] is visually [x,y]
     // so the rect needs to be offset accordingly when drawn
-    ctx.rect(-robot.wheelBase / 2 * Settings.PIXELS_PER_M, -robot.wheelBase / 2 * Settings.PIXELS_PER_M, 0.05 * Settings.PIXELS_PER_M, robot.wheelBase * Settings.PIXELS_PER_M);
+    const rectSize = -robot.get('wheelBase') / 2 * Settings.PIXELS_PER_M;
+    const robotHeight = robot.get('wheelBase') * Settings.PIXELS_PER_M;
+    const robotWidth = 0.05 * Settings.PIXELS_PER_M;
+    ctx.rect(rectSize, rectSize, robotWidth, robotHeight);
 
-    ctx.fillStyle = 'gold';
-    ctx.fill();
-
-    // restore the context to its untranslated/unrotated state
     ctx.restore();
-
-    const sensors = robot.get('sensorPositions');
-
-    sensors.forEach(coords => {
-      ctx.fillStyle = 'rgba(10, 50, 200, 100)';
-      ctx.rect(coords.x, coords.y, 4, 4);
-    });
-
-    ctx.fill();
   }
+
+  drawRobot(ctx) {
+    const {width, height} = ctx.canvas;
+    ctx.clearRect(0, 0, width, height);
+
+    ctx.fillStyle = 'rgba(0, 0, 150, 100)';
+    this.drawRobotBody(ctx);
+    this.drawRobotSensors(ctx);
+  }
+
+
 
   render() {
     return (
       <div className="canvasContainer">
         <canvas
-          ref='canvas'
+          ref='robotCanvas'
+          className="robotCanvas"
+          width={this.props.width}
+          height={this.props.height}
+        />
+        <canvas
+          ref='trackCanvas'
+          className="trackCanvas"
           width={this.props.width}
           height={this.props.height}
         />

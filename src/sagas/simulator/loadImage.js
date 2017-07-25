@@ -4,12 +4,14 @@ import { r_setImageData } from 'actions/worldActions'
 
 
 function* loadImage({payload: {img, targetWidth, realWorldWidth, realWorldHeight}}) {
+  // FIXME: Somehow incorporate realWorld dimensions? --> only use those and PIXELS_PER_M
+
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
 
   const width = img.width;
-  canvas.width = targetWidth;
-  canvas.height = (canvas.width / width) * img.height;
+  canvas.width = realWorldWidth * 1000;
+  canvas.height = realWorldHeight * 1000;
 
   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);

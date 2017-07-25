@@ -16,7 +16,7 @@ export const initialState = fromJS({
  * @param y Y coord in real world in metres.
  * @param radius rotation in degrees
  */
-function convertWorldCoordsToFieldCoords(x, y, radius) {
+export function convertWorldCoordsToFieldCoords(x, y, radius) {
   x *= Settings.PIXELS_PER_M;
   y *= Settings.PIXELS_PER_M;
   radius *= Settings.PIXELS_PER_M;

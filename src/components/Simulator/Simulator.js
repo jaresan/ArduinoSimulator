@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Canvas from './Canvas';
+import Robot from './Robot';
 import { connect } from 'react-redux';
 import { s_loadImage } from 'actions/simulatorActions';
 import { r_tick } from 'actions/robotActions';
@@ -16,19 +17,17 @@ class Simulator extends Component {
   }
 
   loadImage() {
-    const targetWidth = this.props.width;
-
-    const getResizedImage = (src, targetWidth, realWorldWidth, realWorldHeight) => {
+    const getResizedImage = (src, realWorldWidth, realWorldHeight) => {
       const img = new Image();
       img.onload = () => {
-        this.props.loadImage({img, targetWidth, realWorldWidth, realWorldHeight});
+        this.props.loadImage({img, realWorldWidth, realWorldHeight});
       };
 
       img.src = src;
     };
 
     // FIXME: Add params dynamically
-    getResizedImage(Track, targetWidth, 1.089, 1.417);
+    getResizedImage(Track, 0.841, 1.189);
   }
 
 
@@ -67,13 +66,11 @@ class Simulator extends Component {
     return (
       <div className="Simulator">
         <button
-          onClick={() => {
-            console.log(this.props.robot.toJS());
-            this.props.tick(world.get('pixels'));
-          }}
+          onClick={() => setInterval(() => this.props.tick(world.get('pixels')), 20)}
         >
           CLICK MEEEE!!!
         </button>
+        {/*<Robot data={this.props.robot}/>*/}
         {toRender}
       </div>
     );

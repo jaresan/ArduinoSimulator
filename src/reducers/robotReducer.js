@@ -4,16 +4,16 @@ import { rotatePoint, roundWithPrecision } from 'utils';
 import { canSeeLine } from './worldReducer';
 
 const POSITION_PRECISION = 9;
-export const initialState = fromJS({
+let initial = fromJS({
   sensorPositions: [],
   sensorReadings: [],
   noSensorStopTimeout: 200, // When no sensors can see anything, stop after this time
   sensorTimeoutPool: 200,
-  leftWheel: 0.3, // Initial speed as a coefficient of max speed
-  rightWheel: 0.3, // Initial speed as a coefficient of max speed
+  leftWheel: 1600, // Initial speed as a coefficient of max speed
+  rightWheel: 1400, // Initial speed as a coefficient of max speed
   position: {
     x: 0.50,
-    y: 0.875,
+    y: 0.235,
   },
   sensorInterval: 0.02, // in seconds, period of how often the sensors scan
   maxSpeed: 0.2, // in meters per second
@@ -32,6 +32,9 @@ export const initialState = fromJS({
   ],
   sensorRadius: 0.0015, // Half of the square side of the sensor (to know how much the sensor can see)
 });
+initial = initial.set('sensorPositions', getSensorPositions(initial));
+
+export const initialState = initial;
 
 
 function getSensorPosition(robot, deltaX, deltaY) {
@@ -48,7 +51,7 @@ function getSensorPositions(robot) {
 
 function updateSensors(robot, field) {
   const positions = getSensorPositions(robot);
-  const readings = positions.map(([x, y]) => canSeeLine({x, y, field, sensorRadius: robot.get('sensorRadius')}));
+  const readings = positions.map(([x, y]) => canSeeLine({x, y, field, radius: robot.get('sensorRadius')}));
 
   return robot
     .set('sensorPositions', positions)
@@ -60,9 +63,6 @@ function setSpeeds(robot, left, right) {
     robot.get('leftServoCoeff'), robot.get('rightServoCoeff'),
     robot.get('servoStop'), robot.get('servoSpeedSpread')
   ];
-
-  left = Math.min(Math.max(left, -1), 1);
-  right = Math.min(Math.max(right, -1), 1);
 
   const leftWheel = servoStop + (servoSpread * left) * lCoeff;
   const rightWheel = servoStop + (servoSpread * right) * rCoeff;
@@ -83,9 +83,8 @@ function updateRobotState(robot) {
     robot = stop(robot);
   } else {
     // FIXME: Get proper servo speeds
-    // const speeds = getServoSpeedsForSensorInput(sensors);
-    const speeds = [1, 1];
-    setSpeeds(robot, speeds[0], speeds[1]);
+    const speeds = getSpeedCoeffs(sensorReadings);
+    robot = setSpeeds(robot, speeds[0], speeds[1]);
   }
 
   if (sensorReadings.some(s => s)) {
@@ -97,38 +96,33 @@ function updateRobotState(robot) {
   return robot;
 }
 
-function move(robot, moveDuration) {
+function move(robot) {
+  // FIXME: FFS, how can we add moveDuration to this??
   const [x, y] = [robot.getIn(['position', 'x']), robot.getIn(['position', 'y'])];
-  const {left: leftSpeed, right: rightSpeed} = getSpeedCoeffs(robot);
-
-  const leftDelta = moveDuration * leftSpeed;
-  const rightDelta = moveDuration * rightSpeed;
+  const {left: leftSpeed, right: rightSpeed} = getWheelSpeeds(robot);
 
   let newX, newY;
   if (Math.abs(leftSpeed - rightSpeed) >= 1.0e-6) {
-    const r = robot.get('wheelBase') * (leftDelta + rightDelta) / (2 * (rightDelta - leftDelta));
-    const wd = (rightDelta - leftDelta) / robot.get('wheelBase');
+    const r = robot.get('wheelBase') * (rightSpeed + leftSpeed) / (2 * (rightSpeed - leftSpeed));
+    const wd = (rightSpeed - leftSpeed) / robot.get('wheelBase');
     // convert to radians (may wanna have a function for that)
     newX = x + r * Math.sin(Math.PI / 180 * (wd + robot.get('rotation'))) - r * Math.sin(Math.PI / 180 * robot.get('rotation'));
     newY = y - r * Math.cos(Math.PI / 180 * (wd + robot.get('rotation'))) + r * Math.cos(Math.PI / 180 * robot.get('rotation'));
 
-    robot.set('rotation', robot.get('rotation') + wd);
+    robot = robot.set('rotation', robot.get('rotation') + wd);
   } else {
-    newX = x + (leftDelta * Math.cos(Math.PI / 180 * robot.get('rotation')));
-    newY = y + (rightDelta * Math.sin(Math.PI / 180 * robot.get('rotation')));
+    newX = x + (leftSpeed * Math.cos(Math.PI / 180 * robot.get('rotation')));
+    newY = y + (rightSpeed * Math.sin(Math.PI / 180 * robot.get('rotation')));
   }
 
-  console.log('Position 1 - ', robot.get('position').toJS());
-  robot = robot.update('position', pos => {
+  return robot.update('position', pos => {
     return pos
       .set('x', roundWithPrecision(newX, POSITION_PRECISION))
       .set('y', roundWithPrecision(newY, POSITION_PRECISION))
   });
-  console.log('Position 2 - ', robot.get('position').toJS());
-  return robot;
 }
 
-export function getSpeedCoeffs(robot) {
+export function getWheelSpeeds(robot) {
   const [
     lCoeff, rCoeff,
     lWheel, rWheel,
@@ -143,6 +137,21 @@ export function getSpeedCoeffs(robot) {
     left: lCoeff * ((lWheel - sStop) / spread) * maxSpeed,
     right: rCoeff * ((rWheel - sStop) / spread) * maxSpeed
   };
+}
+
+const neuralCoeffs = [[0.4129606627615217,0.8641298225119673],[0.4129606627615217,0.864492604417018],[0.9999170099299433,-0.999388739013922],[0.9999170099299433,-0.9993861165346114],[0.999402886467294,0.9993775771499657],[0.999402886467294,0.9993793586062051],[0.9999837463807071,-0.8661505236669736],[0.9999837463807071,-0.8656147046038524],[-0.6546138126761802,0.9902249347344796],[-0.6546138126761802,0.9902527952223751],[0.9553526800307977,-0.9909680232737271],[0.9553526800307977,-0.9909294526626852],[0.03184430720590564,0.999958043000565],[0.03184430720590564,0.9999581630837409],[0.9998126009155974,0.031190472916745888],[0.9998126009155974,0.033329404672321525],[0.4129606627615217,0.8837286823955529],[0.4129606627615217,0.8840423892969514],[0.9960473661150672,-0.9992783027723218],[0.9960473661150672,-0.9992752078806277],[0.8495018203766445,0.9994728480845073],[0.8495018203766445,0.9994743564565003],[0.9992246162627797,-0.8438475579261203],[0.9992246162627797,-0.8432301917360919],[-0.6546138126761802,0.9917157895306322],[-0.6546138126761802,0.991739418482189],[0.9553526800307977,-0.9893433179295881],[0.9553526800307977,-0.9892978463899196],[0.03184430720590564,0.9999644686202428],[0.03184430720590564,0.9999645703132773],[0.9910956592703719,0.1137758925905202],[0.9910956592703719,0.11588801739011127]];
+
+function getSpeedCoeffs(sensors) {
+  sensors = sensors.toJS();
+  let index = 0;
+  for (let i = 0; i < 5; i++) {
+    index = index << 1;
+    if (sensors[i]) {
+      index++;
+    }
+  }
+
+  return neuralCoeffs[index];
 }
 
 
