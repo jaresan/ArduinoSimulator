@@ -56,9 +56,7 @@ class CodeEditor extends Component {
           mode="javascript"
           theme="kuroir"
           ref="AceEditor"
-          fontSize={20}
-          width={1000 + 'px'}
-          height={1000 + 'px'}
+          fontSize={14}
           showPrintMargin={true}
           showGutter={true}
           highlightActiveLine={true}

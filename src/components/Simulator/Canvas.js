@@ -10,11 +10,13 @@ class Canvas extends Component {
 
   updateCanvas() {
     const ctx = this.refs.robotCanvas.getContext('2d');
+    ctx.scale(this.props.scale, this.props.scale);
     this.drawRobot(ctx);
   }
 
   componentDidMount() {
     const ctx = this.refs.trackCanvas.getContext('2d');
+    ctx.scale(this.props.scale, this.props.scale);
     this.drawTrack(ctx);
     this.updateCanvas();
   }
@@ -92,19 +94,22 @@ class Canvas extends Component {
 
 
   render() {
+    let {width, height, scale} = this.props;
+    width *= scale;
+    height *= scale;
     return (
       <div className="canvasContainer">
         <canvas
           ref='robotCanvas'
           className="robotCanvas"
-          width={this.props.width}
-          height={this.props.height}
+          width={width}
+          height={height}
         />
         <canvas
           ref='trackCanvas'
           className="trackCanvas"
-          width={this.props.width}
-          height={this.props.height}
+          width={width}
+          height={height}
         />
       </div>
     );

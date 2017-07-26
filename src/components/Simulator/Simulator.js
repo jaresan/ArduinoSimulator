@@ -55,6 +55,7 @@ class Simulator extends Component {
     if (world.get('pixels').length > 0) {
       toRender = <Canvas
         robot={this.props.robot}
+        scale={0.5}
         field={world.get('pixels')}
         width={world.get('width')}
         height={world.get('height')}
