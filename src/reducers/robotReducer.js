@@ -82,10 +82,11 @@ function updateRobotState(robot, behavior) {
   if ((timeout - interval) < 0 && sensorReadings.every(s => !s)) {
     robot = stop(robot);
   } else {
-    const wheels = behavior(sensorReadings);
+    const robotMutable = {};
+    behavior(robotMutable, sensorReadings);
     robot = robot
-      .set('leftWheel', wheels[0])
-      .set('rightWheel', wheels[1]);
+      .set('leftWheel', robotMutable.leftWheel)
+      .set('rightWheel', robotMutable.rightWheel);
   }
 
   if (sensorReadings.some(s => s)) {
@@ -97,23 +98,26 @@ function updateRobotState(robot, behavior) {
   return robot;
 }
 
-function move(robot) {
+function move(robot, moveDuration) {
   // FIXME: FFS, how can we add moveDuration to this??
   const [x, y] = [robot.getIn(['position', 'x']), robot.getIn(['position', 'y'])];
   const {left: leftSpeed, right: rightSpeed} = getWheelSpeeds(robot);
 
+  const leftDelta = moveDuration * leftSpeed;
+  const rightDelta = moveDuration * rightSpeed;
+
   let newX, newY;
-  if (Math.abs(leftSpeed - rightSpeed) >= 1.0e-6) {
-    const r = robot.get('wheelBase') * (rightSpeed + leftSpeed) / (2 * (rightSpeed - leftSpeed));
-    const wd = (rightSpeed - leftSpeed) / robot.get('wheelBase');
+  if (Math.abs(leftDelta - rightDelta) >= 1.0e-6) {
+    const r = robot.get('wheelBase') * (rightDelta + leftDelta) / (2 * (rightDelta - leftDelta));
+    const wd = (rightDelta - leftDelta) / robot.get('wheelBase');
     // convert to radians (may wanna have a function for that)
     newX = x + r * Math.sin(Math.PI / 180 * (wd + robot.get('rotation'))) - r * Math.sin(Math.PI / 180 * robot.get('rotation'));
     newY = y - r * Math.cos(Math.PI / 180 * (wd + robot.get('rotation'))) + r * Math.cos(Math.PI / 180 * robot.get('rotation'));
 
     robot = robot.set('rotation', robot.get('rotation') + wd);
   } else {
-    newX = x + (leftSpeed * Math.cos(Math.PI / 180 * robot.get('rotation')));
-    newY = y + (rightSpeed * Math.sin(Math.PI / 180 * robot.get('rotation')));
+    newX = x + (leftDelta * Math.cos(Math.PI / 180 * robot.get('rotation')));
+    newY = y + (rightDelta * Math.sin(Math.PI / 180 * robot.get('rotation')));
   }
 
   return robot.update('position', pos => {
@@ -149,11 +153,11 @@ export default (state = initialState, action) => {
 
   switch (type) {
     case r_tick.type: {
-      const {field, behavior} = payload;
+      const {field, behavior, duration} = payload;
 
       state = updateSensors(state, field);
       state = updateRobotState(state, behavior);
-      return move(state);
+      return move(state, duration || state.get('sensorInterval'));
     }
 
     default:

@@ -66,11 +66,6 @@ class Simulator extends Component {
     // FIXME: Change to prerendered canvases as video?
     return (
       <div className="Simulator">
-        <button
-          onClick={() => setInterval(() => this.props.tick(world.get('pixels')), 20)}
-        >
-          CLICK MEEEE!!!
-        </button>
         {/*<Robot data={this.props.robot}/>*/}
         {toRender}
       </div>
