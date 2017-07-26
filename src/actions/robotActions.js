@@ -1,3 +1,3 @@
 import { createAction } from './utils';
 
-export const r_tick = createAction((field) => ({field}), 'r_Robot.tick');
+export const r_tick = createAction((field, behavior) => ({field, behavior}), 'r_Robot.tick');

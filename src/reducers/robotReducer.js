@@ -74,7 +74,7 @@ function stop(robot) {
   return setSpeeds(robot, 0, 0);
 }
 
-function updateRobotState(robot) {
+function updateRobotState(robot, behavior) {
   const [timeout, interval] = [robot.get('sensorTimeoutPool'), robot.get('sensorInterval')];
 
   const sensorReadings = robot.get('sensorReadings');
@@ -82,9 +82,10 @@ function updateRobotState(robot) {
   if ((timeout - interval) < 0 && sensorReadings.every(s => !s)) {
     robot = stop(robot);
   } else {
-    // FIXME: Get proper servo speeds
-    const speeds = getSpeedCoeffs(sensorReadings);
-    robot = setSpeeds(robot, speeds[0], speeds[1]);
+    const wheels = behavior(sensorReadings);
+    robot = robot
+      .set('leftWheel', wheels[0])
+      .set('rightWheel', wheels[1]);
   }
 
   if (sensorReadings.some(s => s)) {
@@ -139,21 +140,6 @@ export function getWheelSpeeds(robot) {
   };
 }
 
-const neuralCoeffs = [[0.4129606627615217,0.8641298225119673],[0.4129606627615217,0.864492604417018],[0.9999170099299433,-0.999388739013922],[0.9999170099299433,-0.9993861165346114],[0.999402886467294,0.9993775771499657],[0.999402886467294,0.9993793586062051],[0.9999837463807071,-0.8661505236669736],[0.9999837463807071,-0.8656147046038524],[-0.6546138126761802,0.9902249347344796],[-0.6546138126761802,0.9902527952223751],[0.9553526800307977,-0.9909680232737271],[0.9553526800307977,-0.9909294526626852],[0.03184430720590564,0.999958043000565],[0.03184430720590564,0.9999581630837409],[0.9998126009155974,0.031190472916745888],[0.9998126009155974,0.033329404672321525],[0.4129606627615217,0.8837286823955529],[0.4129606627615217,0.8840423892969514],[0.9960473661150672,-0.9992783027723218],[0.9960473661150672,-0.9992752078806277],[0.8495018203766445,0.9994728480845073],[0.8495018203766445,0.9994743564565003],[0.9992246162627797,-0.8438475579261203],[0.9992246162627797,-0.8432301917360919],[-0.6546138126761802,0.9917157895306322],[-0.6546138126761802,0.991739418482189],[0.9553526800307977,-0.9893433179295881],[0.9553526800307977,-0.9892978463899196],[0.03184430720590564,0.9999644686202428],[0.03184430720590564,0.9999645703132773],[0.9910956592703719,0.1137758925905202],[0.9910956592703719,0.11588801739011127]];
-
-function getSpeedCoeffs(sensors) {
-  sensors = sensors.toJS();
-  let index = 0;
-  for (let i = 0; i < 5; i++) {
-    index = index << 1;
-    if (sensors[i]) {
-      index++;
-    }
-  }
-
-  return neuralCoeffs[index];
-}
-
 
 export default (state = initialState, action) => {
   const {
@@ -163,11 +149,11 @@ export default (state = initialState, action) => {
 
   switch (type) {
     case r_tick.type: {
-      const {field, duration} = payload;
+      const {field, behavior} = payload;
 
       state = updateSensors(state, field);
-      state = updateRobotState(state);
-      return move(state, duration || state.get('sensorInterval'));
+      state = updateRobotState(state, behavior);
+      return move(state);
     }
 
     default:
