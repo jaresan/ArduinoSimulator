@@ -10,8 +10,16 @@ class CodeEditorToolbar extends Component {
           Save
         </button>
         <button
-          onClick={() => this.props.onRunRobot()}>
-          Run Robot
+          onClick={() => this.props.onRunSimulation()}>
+          Run simulation
+        </button>
+        <button
+          onClick={() => this.props.onPauseSimulation()}>
+          Pause simulation
+        </button>
+        <button
+          onClick={() => this.props.onStopSimulation()}>
+          Stop simulation
         </button>
       </div>
     );

@@ -5,7 +5,7 @@ import AceEditor from 'react-ace';
 import CodeEditorToolbar from './CodeEditorToolbar';
 
 import { r_saveCode } from 'actions/codeEditorActions';
-import { s_runSimulator } from 'actions/simulatorActions';
+import { s_runSimulator, s_pauseSimulator, s_stopSimulator } from 'actions/simulatorActions';
 import { DEFAULT_CODE } from 'constants/codeEditor';
 
 
@@ -36,9 +36,17 @@ class CodeEditor extends Component {
     this.props.saveCode(this.state.code);
   }
 
-  onRunRobot() {
+  onRunSimulation() {
     this.onSaveCode();
     this.props.runSimulator();
+  }
+
+  onPauseSimulation() {
+    this.props.pauseSimulator();
+  }
+
+  onStopSimulation() {
+    this.props.stopSimulator();
   }
 
   render() {
@@ -66,7 +74,9 @@ class CodeEditor extends Component {
         />
         <CodeEditorToolbar
           onSave={() => this.onSaveCode()}
-          onRunRobot={() => this.onRunRobot()}
+          onRunSimulation={() => this.onRunSimulation()}
+          onPauseSimulation={() => this.onPauseSimulation()}
+          onStopSimulation={() => this.onStopSimulation()}
         />
       </div>
     )
@@ -76,7 +86,9 @@ class CodeEditor extends Component {
 const mapStateToProps = appState => ({});
 const mapDispatchToProps = {
   saveCode: r_saveCode,
-  runSimulator: s_runSimulator
+  runSimulator: s_runSimulator,
+  stopSimulator: s_stopSimulator,
+  pauseSimulator: s_pauseSimulator
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CodeEditor);

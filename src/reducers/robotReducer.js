@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable';
-import { r_tick } from 'actions/robotActions';
+import { r_tick, r_resetRobot } from 'actions/robotActions';
 import { rotatePoint, roundWithPrecision } from 'utils';
 import { canSeeLine } from './worldReducer';
 
@@ -82,7 +82,7 @@ function updateRobotState(robot, behavior) {
   if ((timeout - interval) < 0 && sensorReadings.every(s => !s)) {
     robot = stop(robot);
   } else {
-    const robotMutable = {};
+    const robotMutable = robot.toJS();
     behavior(robotMutable, sensorReadings);
     robot = robot
       .set('leftWheel', robotMutable.leftWheel)
@@ -109,7 +109,7 @@ function move(robot, moveDuration) {
   let newX, newY;
   if (Math.abs(leftDelta - rightDelta) >= 1.0e-6) {
     const r = robot.get('wheelBase') * (rightDelta + leftDelta) / (2 * (rightDelta - leftDelta));
-    const wd = (rightDelta - leftDelta) / robot.get('wheelBase');
+    const wd = (rightSpeed - leftSpeed) / robot.get('wheelBase');
     // convert to radians (may wanna have a function for that)
     newX = x + r * Math.sin(Math.PI / 180 * (wd + robot.get('rotation'))) - r * Math.sin(Math.PI / 180 * robot.get('rotation'));
     newY = y - r * Math.cos(Math.PI / 180 * (wd + robot.get('rotation'))) + r * Math.cos(Math.PI / 180 * robot.get('rotation'));
@@ -158,6 +158,10 @@ export default (state = initialState, action) => {
       state = updateSensors(state, field);
       state = updateRobotState(state, behavior);
       return move(state, duration || state.get('sensorInterval'));
+    }
+
+    case r_resetRobot.type: {
+      return initialState;
     }
 
     default:
