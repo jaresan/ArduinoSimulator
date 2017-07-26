@@ -1,0 +1,7 @@
+.CodeEditor {
+    width: 100%;
+}
+
+.ace_editor {
+    border: solid black 1px;
+}

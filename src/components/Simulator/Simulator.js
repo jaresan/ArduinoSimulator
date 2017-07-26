@@ -63,6 +63,7 @@ class Simulator extends Component {
       toRender = <h1>Loading...</h1>
     }
 
+    // FIXME: Change to prerendered canvases as video?
     return (
       <div className="Simulator">
         <button

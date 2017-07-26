@@ -3,18 +3,14 @@ import ReactDOM from 'react-dom';
 
 import { Provider } from 'react-redux';
 
-import Simulator from 'components/Simulator/Simulator';
 import store from './store';
+
+import App from 'components/App';
 
 
 const app = (
   <Provider store={store}>
-    <div>
-      {/*<Routes />*/}
-      <Simulator
-        width={1000}
-      />
-    </div>
+    <App/>
   </Provider>
 );
 

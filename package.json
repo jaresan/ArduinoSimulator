@@ -16,10 +16,12 @@
     "less-loader": "^2.0.0",
     "prop-types": "^15.5.10",
     "react": "^15.4.1",
+    "react-ace": "^5.1.1",
     "react-dom": "^15.4.1",
     "react-redux": "^5.0.1",
     "react-router": "^3.0.0",
     "react-router-redux": "^4.0.7",
+    "react-virtualized": "^9.9.0",
     "redux": "^3.6.0",
     "redux-saga": "^0.14.4",
     "reselect": "^3.0.1",
@@ -33,7 +35,7 @@
     "lint": "eslint src",
     "lint:fix": "eslint src --fix"
   },
-  "main": "index.js",
+  "main": "components/index.js",
   "repository": "https://github.com/benawad/react-template.git",
   "author": "ben awad <benawad97@gmail.com>",
   "license": "MIT"
