@@ -1,5 +1,4 @@
 .Simulator {
-  width: 50%;
-  position: relative;
+  flex: 1 1 auto;
   border: solid black 1px;
 }

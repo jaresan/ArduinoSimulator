@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { convertWorldCoordsToFieldCoords } from 'reducers/worldReducer';
+import { AutoSizer } from 'react-virtualized';
 
 import * as Settings from 'constants/world';
 
@@ -9,13 +10,13 @@ import './Canvas.css';
 class Canvas extends Component {
 
   updateCanvas() {
-    const ctx = this.refs.robotCanvas.getContext('2d');
+    const ctx = this.robotCanvas.getContext('2d');
     // ctx.scale(this.props.scale, this.props.scale);
     this.drawRobot(ctx);
   }
 
   componentDidMount() {
-    const ctx = this.refs.trackCanvas.getContext('2d');
+    const ctx = this.trackCanvas.getContext('2d');
     // ctx.scale(this.props.scale, this.props.scale);
     this.drawTrack(ctx);
     this.updateCanvas();
@@ -92,26 +93,45 @@ class Canvas extends Component {
   }
 
 
-
   render() {
-    let {width, height, scale} = this.props;
-    // width *= scale;
-    // height *= scale;
+    const {width, height} = this.props;
+
     return (
-      <div className="canvasContainer">
-        <canvas
-          ref='robotCanvas'
-          className="robotCanvas"
-          width={width}
-          height={height}
-        />
-        <canvas
-          ref='trackCanvas'
-          className="trackCanvas"
-          width={width}
-          height={height}
-        />
-      </div>
+      <AutoSizer>
+        {({width: styleWidth, height: styleHeight}) => {
+          const ratio = styleWidth / width;
+          let newWidth = styleWidth;
+          let newHeight = height * ratio;
+          if (newHeight >= styleHeight) {
+            newWidth = width * styleHeight / height;
+            newHeight = styleHeight;
+          }
+          return (
+            <div className="canvasContainer">
+              <canvas
+                ref={(canvas) => this.robotCanvas = canvas}
+                className="robotCanvas"
+                width={width}
+                height={height}
+                style={{
+                  width: newWidth,
+                  height: newHeight
+                }}
+              />
+              <canvas
+                ref={(canvas) => this.trackCanvas = canvas}
+                className="trackCanvas"
+                width={width}
+                height={height}
+                style={{
+                  width: newWidth,
+                  height: newHeight
+                }}
+              />
+            </div>
+          );
+        }}
+      </AutoSizer>
     );
   }
 }

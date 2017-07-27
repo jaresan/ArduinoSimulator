@@ -1,7 +1,8 @@
 .CodeEditor {
-    width: 100%;
+    flex: 1 1 auto;
+    border: solid black 1px;
 }
 
-.ace_editor {
-    border: solid black 1px;
+.CodeEditorToolbar {
+    display: inline-flex;
 }

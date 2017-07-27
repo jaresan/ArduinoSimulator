@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AceEditor from 'react-ace';
+import { AutoSizer } from 'react-virtualized';
 
 import CodeEditorToolbar from './CodeEditorToolbar';
 
@@ -50,34 +51,45 @@ class CodeEditor extends Component {
   }
 
   render() {
+    // FIXME: Make autosizer use <List/> where one row is editor and the other is toolbar
     return (
       <div className="CodeEditor">
-        <AceEditor
-          mode="javascript"
-          theme="kuroir"
-          ref="AceEditor"
-          fontSize={14}
-          width={1000 + 'px'}
-          height={1000 + 'px'}
-          showPrintMargin={true}
-          showGutter={true}
-          highlightActiveLine={true}
-          onChange={(newValue) => this.onCodeChange(newValue)}
-          setOptions={{
-            enableBasicAutocompletion: true,
-            enableLiveAutocompletion: true,
-            enableSnippets: false,
-            showLineNumbers: true,
-            tabSize: 2
-          }}
-          value={this.state.code}
-        />
-        <CodeEditorToolbar
-          onSave={() => this.onSaveCode()}
-          onRunSimulation={() => this.onRunSimulation()}
-          onPauseSimulation={() => this.onPauseSimulation()}
-          onStopSimulation={() => this.onStopSimulation()}
-        />
+        <AutoSizer>
+          {({width, height}) => {
+            return (
+              <div>
+              <AceEditor
+                key={`${width},${height}`}
+                mode="javascript"
+                theme="kuroir"
+                ref="AceEditor"
+                fontSize={14}
+                width={width + 'px'}
+                height={height - 30 + 'px'}
+                showPrintMargin={true}
+                showGutter={true}
+                highlightActiveLine={true}
+                onChange={(newValue) => this.onCodeChange(newValue)}
+                setOptions={{
+                  enableBasicAutocompletion: true,
+                  enableLiveAutocompletion: true,
+                  enableSnippets: false,
+                  showLineNumbers: true,
+                  tabSize: 2
+                }}
+                value={this.state.code}
+              />
+              <CodeEditorToolbar
+                onSave={() => this.onSaveCode()}
+                onRunSimulation={() => this.onRunSimulation()}
+                onPauseSimulation={() => this.onPauseSimulation()}
+                onStopSimulation={() => this.onStopSimulation()}
+              />
+              </div>
+            )
+          }
+        }
+        </AutoSizer>
       </div>
     )
   }

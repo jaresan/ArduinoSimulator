@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 class CodeEditorToolbar extends Component {
   render() {
     return (
-      <div>
+      <div className="CodeEditorToolbar">
         <button
           onClick={() => this.props.onSave()}>
           Save

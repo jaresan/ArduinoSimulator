@@ -1,7 +1,5 @@
 .canvasContainer {
-  width: 100%;
-  overflow: auto;
-  position: relative
+  position: relative;
 }
 
 .robotCanvas {
