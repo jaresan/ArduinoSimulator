@@ -6,8 +6,8 @@ class CodeEditorToolbar extends Component {
     return (
       <div className="CodeEditorToolbar">
         <button
-          onClick={() => this.props.onSave()}>
-          Save
+          onClick={() => this.props.onDownload()}>
+          Download
         </button>
         <button
           onClick={() => this.props.onRunSimulation()}>

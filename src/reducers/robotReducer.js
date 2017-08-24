@@ -6,9 +6,8 @@ import { POSITION_PRECISION, MAX_SERVO_SIGNAL, MIN_SERVO_SIGNAL, ROBOT_PARAMS } 
 
 export const initialState = fromJS({
   memory: {},
-  sensorPositions: getSensorPositions(fromJS(ROBOT_PARAMS)),
   ...ROBOT_PARAMS
-});
+}).set('sensorPositions', getSensorPositions(fromJS(ROBOT_PARAMS)));
 
 
 function getSensorPosition(robot, deltaX, deltaY) {

@@ -8,6 +8,7 @@ import CodeEditorToolbar from './CodeEditorToolbar';
 import { r_saveCode } from 'actions/codeEditorActions';
 import { s_runSimulator, s_pauseSimulator, s_stopSimulator } from 'actions/simulatorActions';
 import { DEFAULT_CODE } from 'constants/codeEditor';
+import { downloadTextAsFile } from 'utils';
 
 
 import 'brace/theme/kuroir';
@@ -33,7 +34,13 @@ class CodeEditor extends Component {
     });
   }
 
+  onDownloadCode() {
+    this.onSaveCode();
+    downloadTextAsFile('arduino_code.js', this.state.code);
+  }
+
   onSaveCode() {
+    // FIXME: Somehow use cookie to save the code on the server and present it on reload
     this.props.saveCode(this.state.code);
   }
 
@@ -80,7 +87,7 @@ class CodeEditor extends Component {
                 value={this.state.code}
               />
               <CodeEditorToolbar
-                onSave={() => this.onSaveCode()}
+                onDownload={() => this.onDownloadCode()}
                 onRunSimulation={() => this.onRunSimulation()}
                 onPauseSimulation={() => this.onPauseSimulation()}
                 onStopSimulation={() => this.onStopSimulation()}

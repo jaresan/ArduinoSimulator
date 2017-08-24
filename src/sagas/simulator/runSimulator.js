@@ -17,6 +17,8 @@ function* runSimulator() {
   setupFunction = eval(setupFunction);
 
   const sensorInterval = robot.get('sensorInterval');
+
+  // FIXME: Catch setup errors
   yield put(r_setup(setupFunction));
   while (true) {
     yield call(delay, sensorInterval * 1000);
