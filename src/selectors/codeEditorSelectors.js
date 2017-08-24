@@ -1,14 +1,23 @@
 import { createSelector } from 'reselect';
 import { getCodeEditor } from 'selectors';
 
-export const getRobotFunction = createSelector(
+export const getRobotFunctions = createSelector(
   getCodeEditor,
-  editor => {
-    return `
-      ((robot, sensors) => {
+  editor => ({
+    setupFunction: `() => {
+        const mutableState = {};
         ${editor.get('code')};
-        return loop.bind(robot)(sensors);
-      })
-    `;
-  }
+        setup.bind(mutableState)();
+        return mutableState;
+      }
+    `,
+
+    loopFunction: `(robot, sensors) => {
+        const mutableState = robot;
+        ${editor.get('code')};
+        loop.bind(mutableState)(sensors);
+        return mutableState;
+      }
+    `
+  })
 );

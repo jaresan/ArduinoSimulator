@@ -1,22 +1,26 @@
 import { select, call, put, take, fork, cancel, takeEvery } from 'redux-saga/effects';
 import { delay } from 'redux-saga'
 import { s_runSimulator, s_pauseSimulator, s_stopSimulator } from 'actions/simulatorActions';
-import { r_tick, r_resetRobot } from 'actions/robotActions';
+import { r_tick, r_resetRobot, r_setup } from 'actions/robotActions';
 
 import { getWorld, getRobot } from 'selectors';
-import { getRobotFunction } from 'selectors/codeEditorSelectors';
+import { getRobotFunctions } from 'selectors/codeEditorSelectors';
 
 
 function* runSimulator() {
   const world = yield select(getWorld);
   const robot = yield select(getRobot);
-  let robotFunction = yield select(getRobotFunction);
-  robotFunction = eval(robotFunction);
+  let { loopFunction, setupFunction } = yield select(getRobotFunctions);
+
+  // FIXME: Catch eval errors (no setup or no loop function etc.)
+  loopFunction = eval(loopFunction);
+  setupFunction = eval(setupFunction);
 
   const sensorInterval = robot.get('sensorInterval');
+  yield put(r_setup(setupFunction));
   while (true) {
     yield call(delay, sensorInterval * 1000);
-    yield put(r_tick(world.get('pixels'), robotFunction, sensorInterval));
+    yield put(r_tick(world.get('pixels'), loopFunction, sensorInterval));
   }
 }
 
