@@ -44,7 +44,7 @@ function setupRobot(robot, setupFn) {
   return mergeRobotState(robot, setupFn({}));
 }
 
-function tickRobot(robot, behavior) {
+function applyBehavior(robot, behavior) {
   const sensorReadings = robot.get('sensorReadings');
 
   const robotState = {
@@ -106,6 +106,6 @@ export default {
   updateSensors,
   moveRobot,
   setupRobot,
-  tickRobot,
+  applyBehavior,
   getSensorPositions
 }

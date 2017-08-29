@@ -21,7 +21,7 @@ export default (state = initialState, action) => {
       const {field, behavior, duration} = payload;
 
       state = Robot.updateSensors(state, field);
-      state = Robot.tickRobot(state, behavior);
+      state = Robot.applyBehavior(state, behavior);
       return Robot.moveRobot(state, duration || state.get('sensorInterval'));
     }
 

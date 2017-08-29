@@ -21,6 +21,7 @@ function* runSimulator() {
   // FIXME: Catch setup errors
   yield put(r_setup(setupFunction));
   while (true) {
+    // Sensor interval is specified in seconds -> times 1000
     yield call(delay, sensorInterval * 1000);
     yield put(r_tick(world.get('pixels'), loopFunction, sensorInterval));
   }
