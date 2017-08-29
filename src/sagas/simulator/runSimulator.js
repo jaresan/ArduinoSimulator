@@ -6,7 +6,7 @@ import { r_tick, r_setup } from 'actions/robotActions';
 import { getWorld, getRobot } from 'selectors';
 import { getRobotFunctions } from 'selectors/codeEditorSelectors';
 
-export function* runSimulator() {
+export default function* runSimulator() {
   const world = yield select(getWorld);
   let robot = yield select(getRobot);
   let { loopFunction, setupFunction } = yield select(getRobotFunctions);

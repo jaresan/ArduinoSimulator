@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable';
-import { r_tick, r_resetRobot, r_setup } from 'actions/robotActions';
+import { r_tick, r_resetRobot, r_setup, r_setRobotState } from 'actions/robotActions';
 import { ROBOT_PARAMS } from 'constants/robot';
 import Robot from 'utils/robot';
 
@@ -31,6 +31,11 @@ export default (state = initialState, action) => {
 
     case r_setup.type: {
       return Robot.setupRobot(state, payload.setupFn);
+    }
+
+    case r_setRobotState.type: {
+      const newState = payload.state || state;
+      return newState;
     }
 
     default:
