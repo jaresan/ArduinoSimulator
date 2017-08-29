@@ -51,15 +51,16 @@ function getSpeedCoeffs(sensors) {
 }
 
 function getWheelSignals(robot, left, right) {
-  const [lCoeff, rCoeff, servoStop, servoSpread] = [
-    robot.leftServoCoeff, robot.rightServoCoeff,
-    robot.servoStop, robot.servoSpeedSpread
-  ];
+  const [lCoeff, rCoeff, servoStop, servoSpread] = [1, -1, 1500, 200];
 
   const leftWheel = servoStop + (servoSpread * left) * lCoeff;
   const rightWheel = servoStop + (servoSpread * right) * rCoeff;
 
   return [leftWheel, rightWheel];
+}
+
+function setup() {
+
 }
 
 function loop(sensors) {
