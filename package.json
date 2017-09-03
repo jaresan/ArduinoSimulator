@@ -38,7 +38,6 @@
     "lint:fix": "eslint src --fix"
   },
   "main": "components/index.js",
-  "repository": "https://github.com/benawad/react-template.git",
-  "author": "ben awad <benawad97@gmail.com>",
+  "author": "Antonin Jares <jares.antonin@gmail.com>",
   "license": "MIT"
 }

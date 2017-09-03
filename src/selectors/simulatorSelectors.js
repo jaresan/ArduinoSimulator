@@ -10,3 +10,8 @@ export const getSimulatorTime = createSelector(
   getSimulator,
   simulator => simulator.get('currentTime')
 );
+
+export const getLoading = createSelector(
+  getSimulator,
+  simulator => simulator.get('loading')
+);

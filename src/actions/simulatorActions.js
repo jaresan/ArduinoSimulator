@@ -13,3 +13,4 @@ export const s_executeCode = createAction(() => {}, 's_Simulator.executeCode');
 export const r_saveRobotHistoryEntry = createAction((time, robot) => ({ time, robot }), 'r_Simulator.saveRobotHistoryEntry');
 export const r_clearHistory = createAction(() => {}, 's_Simulator.clearHistory');
 export const r_setSimulatorTime = createAction(time => ({time}), 'r_Simulator.setSimulatorTime');
+export const r_setLoading = createAction(loading => ({loading}), 'r_Simulator.setLoading');

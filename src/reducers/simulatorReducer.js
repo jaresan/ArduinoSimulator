@@ -1,9 +1,15 @@
 import { fromJS, OrderedMap } from 'immutable';
 import { roundWithPrecision } from 'utils';
-import { r_saveRobotHistoryEntry, r_clearHistory, r_setSimulatorTime } from 'actions/simulatorActions';
+import {
+  r_saveRobotHistoryEntry,
+  r_clearHistory,
+  r_setSimulatorTime,
+  r_setLoading
+} from 'actions/simulatorActions';
 
 const initialState = fromJS({
-  history: OrderedMap()
+  history: OrderedMap(),
+  loading: false
 });
 
 export default (state = initialState, action) => {
@@ -24,6 +30,10 @@ export default (state = initialState, action) => {
 
     case r_setSimulatorTime.type: {
       return state.set('currentTime', payload.time);
+    }
+
+    case r_setLoading.type: {
+      return state.set('loading', payload.loading);
     }
 
     default:

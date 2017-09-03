@@ -1,11 +1,13 @@
 import { select, put } from 'redux-saga/effects';
-import { r_saveRobotHistoryEntry, s_setTime } from 'actions/simulatorActions';
+import { r_saveRobotHistoryEntry, s_setTime, r_setLoading } from 'actions/simulatorActions';
 import { r_tick, r_setup } from 'actions/robotActions';
 
 import { MAX_ROBOT_RUNTIME } from 'constants/simulator';
 import { getWorld, getRobot } from 'selectors';
 import { getRobotFunctions } from 'selectors/codeEditorSelectors';
 
+
+// FIXME: Compute robot history entries on the server
 export default function* executeCode() {
   const world = yield select(getWorld);
   let robot = yield select(getRobot);

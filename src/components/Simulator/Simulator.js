@@ -12,7 +12,7 @@ import {
 } from 'actions/simulatorActions';
 import { r_tick } from 'actions/robotActions';
 import { getRobot, getWorld } from 'selectors';
-import { getHistory, getSimulatorTime } from 'selectors/simulatorSelectors';
+import { getHistory, getSimulatorTime, getLoading } from 'selectors/simulatorSelectors';
 
 import { MAX_ROBOT_RUNTIME } from 'constants/simulator';
 
@@ -50,6 +50,36 @@ class Simulator extends Component {
     this.props.seekTime(time);
   }
 
+  getCanvas() {
+    const world = this.props.world;
+
+    let canvas;
+    if (world.get('pixels').length > 0) {
+      canvas = <Canvas
+        robot={this.props.robot}
+        scale={0.5}
+        field={world.get('pixels')}
+        width={world.get('width')}
+        height={world.get('height')}
+      />
+    } else {
+      canvas = this.getLoadingOverlay();
+    }
+
+    return canvas;
+  }
+
+  getLoadingOverlay() {
+    return (
+      <div className="loading">
+        <div className="overlay"/>
+        <div className="spinnerContainer">
+          <div className="spinner"/>
+        </div>
+      </div>
+    );
+  }
+
 
   getVideo() {
     // FIXME: Implement
@@ -68,21 +98,6 @@ class Simulator extends Component {
   }
 
   render() {
-    const {world} = this.props;
-
-    let canvas;
-    if (world.get('pixels').length > 0) {
-      canvas = <Canvas
-        robot={this.props.robot}
-        scale={0.5}
-        field={world.get('pixels')}
-        width={world.get('width')}
-        height={world.get('height')}
-      />
-    } else {
-      canvas = <h1>Loading...</h1>
-    }
-
     // FIXME: Change to prerendered canvases as video?
     return (
       <div className="Simulator">
@@ -97,7 +112,8 @@ class Simulator extends Component {
           step={this.props.robot.get('sensorInterval')}
           time={this.props.time}
         />
-        {canvas}
+        {this.getCanvas()}
+        {this.props.loading && this.getLoadingOverlay()}
       </div>
     );
   }
@@ -107,7 +123,8 @@ const mapStateToProps = appState => ({
   robot: getRobot(appState),
   world: getWorld(appState),
   history: getHistory(appState),
-  time: getSimulatorTime(appState)
+  time: getSimulatorTime(appState),
+  loading: getLoading(appState)
 });
 
 const mapDispatchToProps = {
