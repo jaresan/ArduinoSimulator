@@ -13,8 +13,6 @@ class SimulatorControls extends Component {
     this.state = {
       time: 0
     };
-
-    this.handleControlsClick = this.handleControlsClick.bind(this);
   }
 
   componentWillReceiveProps(props) {
@@ -44,18 +42,11 @@ class SimulatorControls extends Component {
     };
   }
 
-  handleControlsClick() {
-    if (!this.props.maxTime) {
-      alert('Please execute the code first.');
-    }
-  }
-
-
   render() {
     const disabled = this.getDisabledButtons();
 
     return (
-      <div onClick={this.handleControlsClick} className="SimulatorControls">
+      <div className="SimulatorControls">
         <Slider
           disabled={!this.props.maxTime}
           min={0}
@@ -77,7 +68,7 @@ class SimulatorControls extends Component {
 }
 
 SimulatorControls.propTypes = {
-  maxTime: PropTypes.number.isRequired,
+  maxTime: PropTypes.number,
   step: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
   onPlay: PropTypes.func.isRequired,
@@ -85,7 +76,7 @@ SimulatorControls.propTypes = {
   onStop: PropTypes.func.isRequired,
   onPrevious: PropTypes.func.isRequired,
   onNext: PropTypes.func.isRequired,
-  time: PropTypes.number.isRequired
+  time: PropTypes.number
 };
 
 export default SimulatorControls;

@@ -15,13 +15,34 @@ import { getRobot } from 'selectors';
 import {getSimulatorTime, getLoading } from 'selectors/simulatorSelectors';
 
 import SimulatorControls from './SimulatorControls';
-import './Simulator.css';
+import './SimulatorToolbar.css';
 
 class SimulatorToolbar extends Component {
+
+  renderSensors() {
+    let sensors = this.props.robot.get('sensorReadings').toJS();
+    if (sensors.length === 0) {
+      sensors = [false, false, false, false, false];
+    }
+
+    return (
+      <div className="sensorReadings">
+        {sensors.map(sensor => <div className={`reading ${sensor ? 'active' : ''}`}/>)}
+      </div>
+    );
+  }
+
+  renderPositionInfo() {
+    const robot = this.props.robot;
+
+    return <div className="positionInfo"/>;
+  }
+
+
   render() {
     return (
-      <div>
-        {/*{this.renderSensors()}*/}
+      <div className="SimulatorToolbar">
+        {this.renderSensors()}
         <SimulatorControls
           maxTime={this.props.maxTime}
           onPlay={this.props.runSimulator}
@@ -33,6 +54,7 @@ class SimulatorToolbar extends Component {
           step={this.props.robot.get('sensorInterval')}
           time={this.props.time}
         />
+        {this.renderPositionInfo()}
       </div>
     );
   }

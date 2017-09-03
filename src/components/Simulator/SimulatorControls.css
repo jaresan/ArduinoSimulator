@@ -7,13 +7,8 @@
   transform: scaleY(2.5);
 }
 .SimulatorControls {
-  z-index: 1;
-  width: 90%;
   color: #2980b9;
   font-size: 32px;
-  position: absolute;
-  bottom: 16px;
-  left: 5%;
 }
 .controlButtons {
   padding-top: 8px;
