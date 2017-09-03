@@ -1,10 +1,10 @@
-import { fork, all } from 'redux-saga/effects';
+import { fork } from 'redux-saga/effects';
 import loadImage from './loadImage';
 import simulatorSaga from './simulatorSaga';
 
 export default function* root() {
-  yield all([
+  yield [
     fork(loadImage),
     fork(simulatorSaga)
-  ]);
+  ];
 }
