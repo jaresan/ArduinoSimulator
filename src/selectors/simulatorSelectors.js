@@ -5,3 +5,8 @@ export const getHistory = createSelector(
   getSimulator,
   simulator => simulator.get('history')
 );
+
+export const getSimulatorTime = createSelector(
+  getSimulator,
+  simulator => simulator.get('currentTime')
+);

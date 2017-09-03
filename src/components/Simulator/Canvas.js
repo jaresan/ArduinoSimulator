@@ -26,7 +26,7 @@ class Canvas extends Component {
     this.updateCanvas();
   }
 
-  drawTrack(ctx, scale = 1) {
+  drawTrack(ctx) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
     const field = this.props.field;
@@ -35,10 +35,10 @@ class Canvas extends Component {
       ctx.fillRect(x, y, 1, 1);
     };
 
-    for (let i = 0; i < field[0].length; i += scale) {
-      for (let j = 0; j < field.length; j += scale) {
+    for (let i = 0; i < field[0].length; i++) {
+      for (let j = 0; j < field.length; j++) {
         if (field[j][i]) {
-          drawPixel(j / scale, i / scale);
+          drawPixel(j, i);
         }
       }
     }

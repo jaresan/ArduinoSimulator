@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { PlaybackControls, ProgressBar } from 'react-player-controls'
+import { PlaybackControls } from 'react-player-controls'
 import Canvas from './Canvas';
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
 
-import { s_loadImage, s_moveToTime, s_seekTime } from 'actions/simulatorActions';
+import { MAX_ROBOT_RUNTIME } from 'constants/simulator';
+import { s_loadImage, s_seekTime, s_runSimulator } from 'actions/simulatorActions';
 import { r_tick } from 'actions/robotActions';
 import { getRobot, getWorld } from 'selectors';
+import { getHistory, getSimulatorTime } from 'selectors/simulatorSelectors';
 
 import Track from 'assets/track.png';
 import './Simulator.css';
@@ -39,10 +43,6 @@ class Simulator extends Component {
   }
 
   onSeek(time) {
-    this.setState({
-      currentTime: time
-    });
-
     this.props.seekTime(time);
   }
 
@@ -82,12 +82,10 @@ class Simulator extends Component {
     // FIXME: Change to prerendered canvases as video?
     return (
       <div className="Simulator">
-        {/*<Robot data={this.props.robot}/>*/}
-        {canvas}
         <PlaybackControls
           isPlayable={true}
           isPlaying={false}
-          onPlaybackChange={() => console.log('ajajaj')}
+          onPlaybackChange={this.props.runSimulator}
           showPrevious={true}
           hasPrevious={true}
           onPrevious={() => console.log('PREFIUS')}
@@ -95,11 +93,14 @@ class Simulator extends Component {
           hasNext={true}
           onNext={() => console.log('ajajajajaja')}
         />
-        <ProgressBar
-          totalTime={60}
-          currentTime={this.state.currentTime}
-          isSeekable={true}
-          onSeek={time => this.onSeek(time)}
+        {canvas}
+        <Slider
+          disabled={!this.props.history.keySeq().last()}
+          min={0}
+          max={this.props.history.keySeq().last()}
+          step={this.props.robot.get('sensorInterval')}
+          onChange={time => this.onSeek(time)}
+          value={this.props.time}
         />
       </div>
     );
@@ -108,10 +109,13 @@ class Simulator extends Component {
 
 const mapStateToProps = appState => ({
   robot: getRobot(appState),
-  world: getWorld(appState)
+  world: getWorld(appState),
+  history: getHistory(appState),
+  time: getSimulatorTime(appState)
 });
 
 const mapDispatchToProps = {
+  runSimulator: s_runSimulator,
   loadImage: s_loadImage,
   tick: r_tick,
   seekTime: s_seekTime

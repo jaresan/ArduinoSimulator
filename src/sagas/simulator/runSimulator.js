@@ -1,31 +1,24 @@
-import { select, call, put } from 'redux-saga/effects';
-import { delay } from 'redux-saga'
-import { r_saveRobotHistoryEntry } from 'actions/simulatorActions';
-import { r_tick, r_setup } from 'actions/robotActions';
+import { select, put, call } from 'redux-saga/effects';
+import { delay } from 'redux-saga';
 
-import { getWorld, getRobot } from 'selectors';
-import { getRobotFunctions } from 'selectors/codeEditorSelectors';
+import { r_setSimulatorTime } from 'actions/simulatorActions';
+import { r_setRobotState } from 'actions/robotActions';
+
+import { getRobot } from 'selectors';
+import { getHistory, getSimulatorTime } from 'selectors/simulatorSelectors';
 
 export default function* runSimulator() {
-  const world = yield select(getWorld);
-  let robot = yield select(getRobot);
-  let { loopFunction, setupFunction } = yield select(getRobotFunctions);
+  const history = yield select(getHistory);
+  const robot = yield select(getRobot);
 
-  // FIXME: Catch eval errors (no setup or no loop function etc.)
-  loopFunction = eval(loopFunction);
-  setupFunction = eval(setupFunction);
-
+  const historyTimes = history.keySeq().toArray();
   const sensorInterval = robot.get('sensorInterval');
 
-  // FIXME: Catch setup errors
-  yield put(r_setup(setupFunction));
-  let i = 0;
-  while (true) {
-    yield put(r_saveRobotHistoryEntry(i++ * sensorInterval, robot));
-
-    // Sensor interval is specified in seconds and delay takes nanoseconds -> times 1000
+  const currentTime = yield select(getSimulatorTime);
+  const currentTimeIndex = historyTimes.indexOf(currentTime) || 0;
+  for (let i = currentTimeIndex; i < historyTimes.length; i++) {
     yield call(delay, sensorInterval * 1000);
-    yield put(r_tick(world.get('pixels'), loopFunction, sensorInterval));
-    robot = yield select(getRobot);
+    yield put(r_setRobotState(history.get(historyTimes[i])));
+    yield put(r_setSimulatorTime(historyTimes[i]));
   }
 }

@@ -6,7 +6,7 @@ import { AutoSizer } from 'react-virtualized';
 import CodeEditorToolbar from './CodeEditorToolbar';
 
 import { r_saveCode } from 'actions/codeEditorActions';
-import { s_runSimulator, s_pauseSimulator, s_stopSimulator } from 'actions/simulatorActions';
+import { s_runSimulator, s_pauseSimulator, s_stopSimulator, s_executeCode } from 'actions/simulatorActions';
 import { DEFAULT_CODE } from 'constants/codeEditor';
 import { downloadTextAsFile } from 'utils';
 
@@ -44,9 +44,9 @@ class CodeEditor extends Component {
     this.props.saveCode(this.state.code);
   }
 
-  onRunSimulation() {
+  onExecuteCode() {
     this.onSaveCode();
-    this.props.runSimulator();
+    this.props.executeCode();
   }
 
   onPauseSimulation() {
@@ -88,7 +88,7 @@ class CodeEditor extends Component {
               />
               <CodeEditorToolbar
                 onDownload={() => this.onDownloadCode()}
-                onRunSimulation={() => this.onRunSimulation()}
+                onExecuteCode={() => this.onExecuteCode()}
                 onPauseSimulation={() => this.onPauseSimulation()}
                 onStopSimulation={() => this.onStopSimulation()}
               />
@@ -105,7 +105,7 @@ class CodeEditor extends Component {
 const mapStateToProps = appState => ({});
 const mapDispatchToProps = {
   saveCode: r_saveCode,
-  runSimulator: s_runSimulator,
+  executeCode: s_executeCode,
   stopSimulator: s_stopSimulator,
   pauseSimulator: s_pauseSimulator
 };

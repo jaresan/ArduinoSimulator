@@ -1,0 +1,1 @@
+export const MAX_ROBOT_RUNTIME = 120;

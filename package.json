@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "eslint": "^3.15.0",
+    "eslint": "^3.19.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
@@ -15,6 +15,7 @@
     "less": "^2.5.3",
     "less-loader": "^2.0.0",
     "prop-types": "^15.5.10",
+    "rc-slider": "^8.3.1",
     "react": "^15.4.1",
     "react-ace": "^5.1.1",
     "react-dom": "^15.4.1",

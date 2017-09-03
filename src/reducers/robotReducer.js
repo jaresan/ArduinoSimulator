@@ -34,8 +34,7 @@ export default (state = initialState, action) => {
     }
 
     case r_setRobotState.type: {
-      const newState = payload.state || state;
-      return newState;
+      return payload.state || state;
     }
 
     default:

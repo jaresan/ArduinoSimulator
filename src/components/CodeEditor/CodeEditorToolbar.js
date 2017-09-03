@@ -10,8 +10,8 @@ class CodeEditorToolbar extends Component {
           Download
         </button>
         <button
-          onClick={() => this.props.onRunSimulation()}>
-          Run simulation
+          onClick={() => this.props.onExecuteCode()}>
+          Execute
         </button>
         <button
           onClick={() => this.props.onPauseSimulation()}>
