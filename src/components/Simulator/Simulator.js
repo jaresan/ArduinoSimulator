@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { s_loadImage, s_setTime, s_runSimulator, s_pauseSimulator, s_stopSimulator } from 'actions/simulatorActions';
+import {
+  s_loadImage,
+  s_seekTime,
+  s_runSimulator,
+  s_pauseSimulator,
+  s_stepNext,
+  s_stepPrevious,
+  s_stopSimulator
+} from 'actions/simulatorActions';
 import { r_tick } from 'actions/robotActions';
 import { getRobot, getWorld } from 'selectors';
 import { getHistory, getSimulatorTime } from 'selectors/simulatorSelectors';
@@ -39,7 +47,7 @@ class Simulator extends Component {
   }
 
   onSeek(time) {
-    this.props.setTime(time);
+    this.props.seekTime(time);
   }
 
 
@@ -81,8 +89,8 @@ class Simulator extends Component {
         <SimulatorControls
           history={this.props.history}
           onPlay={this.props.runSimulator}
-          onNext={''}
-          onPrevious={''}
+          onNext={this.props.stepNext}
+          onPrevious={this.props.stepPrevious}
           onPause={this.props.pauseSimulator}
           onStop={this.props.stopSimulator}
           onChange={this.onSeek}
@@ -106,9 +114,11 @@ const mapDispatchToProps = {
   runSimulator: s_runSimulator,
   stopSimulator: s_stopSimulator,
   pauseSimulator: s_pauseSimulator,
+  stepNext: s_stepNext,
+  stepPrevious: s_stepPrevious,
   loadImage: s_loadImage,
   tick: r_tick,
-  setTime: s_setTime
+  seekTime: s_seekTime
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Simulator);

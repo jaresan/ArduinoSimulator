@@ -36,9 +36,9 @@ class SimulatorControls extends Component {
         />
         <div className="controlButtons">
           <i onClick={this.props.onStop} className="icon-stop" aria-hidden="true"/>
-          <i className="icon-previous" aria-hidden="true"/>
+          <i onClick={this.props.onPrevious} className="icon-previous" aria-hidden="true"/>
           <i onClick={this.props.onPlay} className="icon-play" aria-hidden="true"/>
-          <i className="icon-next" aria-hidden="true"/>
+          <i onClick={this.props.onNext} className="icon-next" aria-hidden="true"/>
           <i onClick={this.props.onPause} className="icon-pause" aria-hidden="true"/>
         </div>
       </div>

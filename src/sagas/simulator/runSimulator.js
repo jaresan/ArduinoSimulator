@@ -1,7 +1,7 @@
 import { select, put, call } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 
-import { r_setSimulatorTime } from 'actions/simulatorActions';
+import { s_setTime } from 'actions/simulatorActions';
 import { r_setRobotState } from 'actions/robotActions';
 
 import { getRobot } from 'selectors';
@@ -18,7 +18,6 @@ export default function* runSimulator() {
   const currentTimeIndex = historyTimes.indexOf(currentTime) || 0;
   for (let i = currentTimeIndex; i < historyTimes.length; i++) {
     yield call(delay, sensorInterval * 1000);
-    yield put(r_setRobotState(history.get(historyTimes[i])));
-    yield put(r_setSimulatorTime(historyTimes[i]));
+    yield put(s_setTime(historyTimes[i]));
   }
 }

@@ -6,9 +6,9 @@ import { getRobot } from 'selectors';
 
 export default function* setTime({ payload: { time } }) {
   const history = yield select(getHistory);
-  const index = history.findLastKey((value, index) => index <= time);
-  const seekState = history.get(index);
+  const timeToSet = history.findLastKey((value, index) => index <= time);
+  const seekState = history.get(timeToSet);
 
-  yield put(r_setSimulatorTime(time));
+  yield put(r_setSimulatorTime(timeToSet));
   yield put(r_setRobotState(seekState));
 }
