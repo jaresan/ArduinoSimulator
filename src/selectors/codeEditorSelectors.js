@@ -21,3 +21,8 @@ export const getRobotFunctions = createSelector(
     `
   })
 );
+
+export const getCode = createSelector(
+  getCodeEditor,
+  editor => editor.get('code')
+);

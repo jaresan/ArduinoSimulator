@@ -11,3 +11,15 @@ export const getSensorReadings = createSelector(
   getRobot,
   robot => robot.get('sensors')
 );
+
+export const getInternalState = createSelector(
+  getRobot,
+  robot => {
+    return {
+      ...robot.get('memory').toJS(),
+      leftWheel: robot.get('leftWheel'),
+      rightWheel: robot.get('rightWheel'),
+      sensors: robot.get('sensorReadings').toJS()
+    }
+  }
+);

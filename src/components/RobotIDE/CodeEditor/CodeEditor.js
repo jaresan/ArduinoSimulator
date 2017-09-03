@@ -8,6 +8,7 @@ import CodeEditorToolbar from './CodeEditorToolbar';
 import { r_saveCode } from 'actions/codeEditorActions';
 import { s_executeCode } from 'actions/simulatorActions';
 import { DEFAULT_CODE } from 'constants/codeEditor';
+import { getCode } from 'selectors/codeEditorSelectors';
 import { downloadTextAsFile } from 'utils';
 
 
@@ -24,8 +25,12 @@ class CodeEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      code: DEFAULT_CODE
-    }
+      code: props.code || DEFAULT_CODE
+    };
+  }
+
+  componentWillUnmount() {
+    this.onSaveCode();
   }
 
   onCodeChange(newValue) {
@@ -65,42 +70,44 @@ class CodeEditor extends Component {
           {({width, height}) => {
             return (
               <div>
-              <AceEditor
-                key={`${width},${height}`}
-                mode="javascript"
-                theme="kuroir"
-                ref="AceEditor"
-                fontSize={14}
-                width={width + 'px'}
-                height={height - 30 + 'px'}
-                showPrintMargin={true}
-                showGutter={true}
-                highlightActiveLine={true}
-                onChange={(newValue) => this.onCodeChange(newValue)}
-                setOptions={{
-                  enableBasicAutocompletion: true,
-                  enableLiveAutocompletion: true,
-                  enableSnippets: false,
-                  showLineNumbers: true,
-                  tabSize: 2
-                }}
-                value={this.state.code}
-              />
-              <CodeEditorToolbar
-                onDownload={() => this.onDownloadCode()}
-                onExecuteCode={() => this.onExecuteCode()}
-              />
+                <AceEditor
+                  key={`${width},${height}`}
+                  mode="javascript"
+                  theme="kuroir"
+                  ref="AceEditor"
+                  fontSize={14}
+                  width={width + 'px'}
+                  height={height - 30 + 'px'}
+                  showPrintMargin={true}
+                  showGutter={true}
+                  highlightActiveLine={true}
+                  onChange={(newValue) => this.onCodeChange(newValue)}
+                  setOptions={{
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: true,
+                    enableSnippets: false,
+                    showLineNumbers: true,
+                    tabSize: 2
+                  }}
+                  value={this.state.code}
+                  editorProps={{$blockScrolling: Infinity}}
+                />
+                <CodeEditorToolbar
+                  onDownload={() => this.onDownloadCode()}
+                  onExecuteCode={() => this.onExecuteCode()}
+                />
               </div>
             )
-          }
-        }
+          }}
         </AutoSizer>
       </div>
     )
   }
 }
 
-const mapStateToProps = appState => ({});
+const mapStateToProps = appState => ({
+  code: getCode(appState)
+});
 const mapDispatchToProps = {
   saveCode: r_saveCode,
   executeCode: s_executeCode

@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { getSimulator, getWorld } from 'selectors';
+import { getSimulator } from 'selectors';
 
 export const getHistory = createSelector(
   getSimulator,

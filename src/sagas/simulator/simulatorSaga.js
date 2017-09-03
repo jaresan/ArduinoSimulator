@@ -1,4 +1,4 @@
-import { take, fork, cancel, takeEvery } from 'redux-saga/effects';
+import { take, fork, cancel, takeEvery, all } from 'redux-saga/effects';
 import runSimulator from './runSimulator';
 import resetSimulator from './resetSimulator';
 import setTime from './setTime';
@@ -14,8 +14,6 @@ import {
 	s_setTime,
 	s_executeCode
 } from 'actions/simulatorActions';
-
-import { getWorld, getRobot } from 'selectors';
 
 function* simulatorHandler() {
   const task = yield fork(runSimulator);
@@ -34,7 +32,7 @@ function* simulatorHandler() {
 }
 
 export default function* simulatorSaga() {
-  yield [
+  yield all([
     takeEvery(s_stepNext.type, stepSimulator.bind(null, { next: 1 })),
     takeEvery(s_stepPrevious.type, stepSimulator),
     takeEvery(s_stopSimulator.type, resetSimulator),
@@ -42,5 +40,5 @@ export default function* simulatorSaga() {
     takeEvery(s_seekTime.type, setTime),
     takeEvery(s_setTime.type, setTime),
     takeEvery(s_executeCode.type, executeCode)
-  ];
+  ]);
 }

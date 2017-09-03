@@ -2,19 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import {
-  s_loadImage,
-  s_seekTime,
-  s_runSimulator,
-  s_pauseSimulator,
-  s_stepNext,
-  s_stepPrevious,
-  s_stopSimulator
+  s_loadImage
 } from 'actions/simulatorActions';
 import { r_tick } from 'actions/robotActions';
 import { getRobot, getWorld } from 'selectors';
 import { getHistory, getSimulatorTime, getLoading } from 'selectors/simulatorSelectors';
-
-import { MAX_ROBOT_RUNTIME } from 'constants/simulator';
 
 import Canvas from './Canvas';
 import SimulatorToolbar from './SimulatorToolbar';

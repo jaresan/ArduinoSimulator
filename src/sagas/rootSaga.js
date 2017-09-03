@@ -8,7 +8,5 @@ import simulatorSaga from './simulator';
 
 
 export default function* root() {
-  yield [
-    fork(simulatorSaga)
-  ];
+  yield fork(simulatorSaga);
 }

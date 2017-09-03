@@ -2,7 +2,6 @@ import { select, put, call } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 
 import { s_setTime } from 'actions/simulatorActions';
-import { r_setRobotState } from 'actions/robotActions';
 
 import { getRobot } from 'selectors';
 import { getHistory, getSimulatorTime } from 'selectors/simulatorSelectors';

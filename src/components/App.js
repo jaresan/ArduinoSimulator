@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Simulator from 'components/Simulator/Simulator';
-import CodeEditor from 'components/CodeEditor/CodeEditor';
+import RobotIDE from 'components/RobotIDE/RobotIDE';
 
 import './App.css';
 
@@ -9,10 +9,8 @@ class App extends Component {
     return (
       <div className="App">
         {/*<Routes />*/}
-        <Simulator
-          width={1000}
-        />
-        <CodeEditor/>
+        <Simulator/>
+        <RobotIDE/>
       </div>
     );
   }

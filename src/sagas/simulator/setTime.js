@@ -1,9 +1,8 @@
 import { put, select } from 'redux-saga/effects';
-import { r_moveToTime, r_setSimulatorTime } from 'actions/simulatorActions';
+import { r_setSimulatorTime } from 'actions/simulatorActions';
 import { r_setRobotState } from 'actions/robotActions';
 import { getHistory } from 'selectors/simulatorSelectors';
 import { getRobot } from 'selectors';
-import { roundWithPrecision } from 'utils';
 
 export default function* setTime({ payload: { time } }) {
   const robot = yield select(getRobot);

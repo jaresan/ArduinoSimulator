@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-  s_loadImage,
   s_seekTime,
   s_runSimulator,
   s_pauseSimulator,
@@ -10,9 +9,7 @@ import {
   s_stopSimulator
 } from 'actions/simulatorActions';
 
-import { r_tick } from 'actions/robotActions';
-import { getRobot } from 'selectors';
-import {getSimulatorTime, getLoading } from 'selectors/simulatorSelectors';
+import { getLoading } from 'selectors/simulatorSelectors';
 
 import SimulatorControls from './SimulatorControls';
 import './SimulatorToolbar.css';
@@ -33,7 +30,7 @@ class SimulatorToolbar extends Component {
   }
 
   renderPositionInfo() {
-    const robot = this.props.robot;
+    // const robot = this.props.robot;
 
     return <div className="positionInfo"/>;
   }
