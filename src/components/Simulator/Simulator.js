@@ -1,27 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { PlaybackControls } from 'react-player-controls'
-import Canvas from './Canvas';
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
-
-import { MAX_ROBOT_RUNTIME } from 'constants/simulator';
-import { s_loadImage, s_seekTime, s_runSimulator } from 'actions/simulatorActions';
+import { s_loadImage, s_setTime, s_runSimulator, s_pauseSimulator, s_stopSimulator } from 'actions/simulatorActions';
 import { r_tick } from 'actions/robotActions';
 import { getRobot, getWorld } from 'selectors';
 import { getHistory, getSimulatorTime } from 'selectors/simulatorSelectors';
 
+import { MAX_ROBOT_RUNTIME } from 'constants/simulator';
+
+import Canvas from './Canvas';
+import SimulatorControls from './SimulatorControls';
 import Track from 'assets/track.png';
 import './Simulator.css';
 
 class Simulator extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentTime: 0
-    };
+  constructor() {
+    super();
+    this.onSeek = this.onSeek.bind(this);
   }
 
   componentWillMount() {
@@ -43,7 +39,7 @@ class Simulator extends Component {
   }
 
   onSeek(time) {
-    this.props.seekTime(time);
+    this.props.setTime(time);
   }
 
 
@@ -82,26 +78,18 @@ class Simulator extends Component {
     // FIXME: Change to prerendered canvases as video?
     return (
       <div className="Simulator">
-        <PlaybackControls
-          isPlayable={true}
-          isPlaying={false}
-          onPlaybackChange={this.props.runSimulator}
-          showPrevious={true}
-          hasPrevious={true}
-          onPrevious={() => console.log('PREFIUS')}
-          showNext={true}
-          hasNext={true}
-          onNext={() => console.log('ajajajajaja')}
+        <SimulatorControls
+          history={this.props.history}
+          onPlay={this.props.runSimulator}
+          onNext={''}
+          onPrevious={''}
+          onPause={this.props.pauseSimulator}
+          onStop={this.props.stopSimulator}
+          onChange={this.onSeek}
+          step={this.props.robot.get('sensorInterval')}
+          time={this.props.time}
         />
         {canvas}
-        <Slider
-          disabled={!this.props.history.keySeq().last()}
-          min={0}
-          max={this.props.history.keySeq().last()}
-          step={this.props.robot.get('sensorInterval')}
-          onChange={time => this.onSeek(time)}
-          value={this.props.time}
-        />
       </div>
     );
   }
@@ -116,9 +104,11 @@ const mapStateToProps = appState => ({
 
 const mapDispatchToProps = {
   runSimulator: s_runSimulator,
+  stopSimulator: s_stopSimulator,
+  pauseSimulator: s_pauseSimulator,
   loadImage: s_loadImage,
   tick: r_tick,
-  seekTime: s_seekTime
+  setTime: s_setTime
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Simulator);

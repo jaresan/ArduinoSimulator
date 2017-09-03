@@ -13,14 +13,6 @@ class CodeEditorToolbar extends Component {
           onClick={() => this.props.onExecuteCode()}>
           Execute
         </button>
-        <button
-          onClick={() => this.props.onPauseSimulation()}>
-          Pause simulation
-        </button>
-        <button
-          onClick={() => this.props.onStopSimulation()}>
-          Stop simulation
-        </button>
       </div>
     );
   }

@@ -1,5 +1,5 @@
 import { select, put } from 'redux-saga/effects';
-import { r_saveRobotHistoryEntry } from 'actions/simulatorActions';
+import { r_saveRobotHistoryEntry, s_setTime } from 'actions/simulatorActions';
 import { r_tick, r_setup } from 'actions/robotActions';
 
 import { MAX_ROBOT_RUNTIME } from 'constants/simulator';
@@ -25,4 +25,6 @@ export default function* executeCode() {
     yield put(r_tick(world.get('pixels'), loopFunction, sensorInterval));
     robot = yield select(getRobot);
   }
+
+  yield put(s_setTime(0));
 }
