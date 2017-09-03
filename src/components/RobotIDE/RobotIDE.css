@@ -1,0 +1,16 @@
+.RobotIDE {
+  flex: 1 1 auto;
+  border: solid black 1px;
+}
+.RobotIDE .react-tabs {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.RobotIDE .react-tabs .react-tabs__tab-panel {
+  position: absolute;
+  top: 33px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
