@@ -13,6 +13,16 @@ class SimulatorControls extends Component {
     this.state = {
       time: 0
     };
+
+    this.handleControlsClick = this.handleControlsClick.bind(this);
+  }
+
+  componentWillReceiveProps(props) {
+    if (props.time !== this.state.time) {
+      this.setState({
+        time: props.time
+      });
+    }
   }
 
   onChangeTime(time) {
@@ -22,10 +32,30 @@ class SimulatorControls extends Component {
     this.props.onChange(time);
   }
 
+  getDisabledButtons() {
+    const codeLoaded = this.props.history.keySeq().last();
+
+    return {
+      previous: !codeLoaded || this.state.time === 0,
+      next: !codeLoaded || this.state.time === this.props.history.keySeq().last(),
+      stop: !codeLoaded,
+      play: !codeLoaded,
+      pause: !codeLoaded
+    };
+  }
+
+  handleControlsClick() {
+    if (!this.props.history.keySeq().last()) {
+      alert('Please execute the code first.');
+    }
+  }
+
 
   render() {
+    const disabled = this.getDisabledButtons();
+
     return (
-      <div className="SimulatorControls">
+      <div onClick={this.handleControlsClick} className="SimulatorControls">
         <Slider
           disabled={!this.props.history.keySeq().last()}
           min={0}
@@ -35,11 +65,11 @@ class SimulatorControls extends Component {
           value={this.props.time}
         />
         <div className="controlButtons">
-          <i onClick={this.props.onStop} className="icon-stop" aria-hidden="true"/>
-          <i onClick={this.props.onPrevious} className="icon-previous" aria-hidden="true"/>
-          <i onClick={this.props.onPlay} className="icon-play" aria-hidden="true"/>
-          <i onClick={this.props.onNext} className="icon-next" aria-hidden="true"/>
-          <i onClick={this.props.onPause} className="icon-pause" aria-hidden="true"/>
+          <i onClick={this.props.onStop} disabled={disabled.stop} className="icon-stop" aria-hidden="true"/>
+          <i onClick={this.props.onPrevious} disabled={disabled.previous} className="icon-previous" aria-hidden="true"/>
+          <i onClick={this.props.onPlay} disabled={disabled.play} className="icon-play" aria-hidden="true"/>
+          <i onClick={this.props.onNext} disabled={disabled.next} className="icon-next" aria-hidden="true"/>
+          <i onClick={this.props.onPause} disabled={disabled.pause} className="icon-pause" aria-hidden="true"/>
         </div>
       </div>
     )

@@ -23,16 +23,20 @@
 .controlButtons {
     padding-top: 8px;
     text-align: center;
-}
 
-.controlButtons i {
-    padding: 4px;
-}
+    i {
+        padding: 4px;
 
-.controlButtons i:active {
-    opacity: 0.5;
-}
+        &[disabled] {
+            color: lightgrey;
+            pointer-events: none;
+        }
 
+        &:active {
+            opacity: 0.5;
+        }
+    }
+}
 
 
 

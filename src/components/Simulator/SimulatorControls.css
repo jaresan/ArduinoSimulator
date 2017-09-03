@@ -22,6 +22,10 @@
 .controlButtons i {
   padding: 4px;
 }
+.controlButtons i[disabled] {
+  color: lightgrey;
+  pointer-events: none;
+}
 .controlButtons i:active {
   opacity: 0.5;
 }
