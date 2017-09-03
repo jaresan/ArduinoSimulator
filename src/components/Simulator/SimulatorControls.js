@@ -33,11 +33,11 @@ class SimulatorControls extends Component {
   }
 
   getDisabledButtons() {
-    const codeLoaded = this.props.history.keySeq().last();
+    const codeLoaded = this.props.maxTime;
 
     return {
       previous: !codeLoaded || this.state.time === 0,
-      next: !codeLoaded || this.state.time === this.props.history.keySeq().last(),
+      next: !codeLoaded || this.state.time === this.props.maxTime,
       stop: !codeLoaded,
       play: !codeLoaded,
       pause: !codeLoaded
@@ -45,7 +45,7 @@ class SimulatorControls extends Component {
   }
 
   handleControlsClick() {
-    if (!this.props.history.keySeq().last()) {
+    if (!this.props.maxTime) {
       alert('Please execute the code first.');
     }
   }
@@ -57,9 +57,9 @@ class SimulatorControls extends Component {
     return (
       <div onClick={this.handleControlsClick} className="SimulatorControls">
         <Slider
-          disabled={!this.props.history.keySeq().last()}
+          disabled={!this.props.maxTime}
           min={0}
-          max={this.props.history.keySeq().last()}
+          max={this.props.maxTime}
           step={this.props.step}
           onChange={time => this.onChangeTime(time)}
           value={this.props.time}
@@ -77,7 +77,7 @@ class SimulatorControls extends Component {
 }
 
 SimulatorControls.propTypes = {
-  history: PropTypes.object.isRequired,
+  maxTime: PropTypes.number.isRequired,
   step: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
   onPlay: PropTypes.func.isRequired,

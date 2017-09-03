@@ -17,17 +17,11 @@ import { getHistory, getSimulatorTime, getLoading } from 'selectors/simulatorSel
 import { MAX_ROBOT_RUNTIME } from 'constants/simulator';
 
 import Canvas from './Canvas';
-import SimulatorControls from './SimulatorControls';
+import SimulatorToolbar from './SimulatorToolbar';
 import Track from 'assets/track.png';
 import './Simulator.css';
 
 class Simulator extends Component {
-
-  constructor() {
-    super();
-    this.onSeek = this.onSeek.bind(this);
-  }
-
   componentWillMount() {
     this.loadImage();
   }
@@ -44,10 +38,6 @@ class Simulator extends Component {
 
     // FIXME: Add params dynamically
     getResizedImage(Track, 0.841, 1.189);
-  }
-
-  onSeek(time) {
-    this.props.seekTime(time);
   }
 
   getCanvas() {
@@ -101,16 +91,10 @@ class Simulator extends Component {
     // FIXME: Change to prerendered canvases as video?
     return (
       <div className="Simulator">
-        <SimulatorControls
-          history={this.props.history}
-          onPlay={this.props.runSimulator}
-          onNext={this.props.stepNext}
-          onPrevious={this.props.stepPrevious}
-          onPause={this.props.pauseSimulator}
-          onStop={this.props.stopSimulator}
-          onChange={this.onSeek}
-          step={this.props.robot.get('sensorInterval')}
+        <SimulatorToolbar
+          robot={this.props.robot}
           time={this.props.time}
+          maxTime={this.props.history.keySeq().last()}
         />
         {this.getCanvas()}
         {this.props.loading && this.getLoadingOverlay()}
@@ -128,14 +112,8 @@ const mapStateToProps = appState => ({
 });
 
 const mapDispatchToProps = {
-  runSimulator: s_runSimulator,
-  stopSimulator: s_stopSimulator,
-  pauseSimulator: s_pauseSimulator,
-  stepNext: s_stepNext,
-  stepPrevious: s_stepPrevious,
   loadImage: s_loadImage,
-  tick: r_tick,
-  seekTime: s_seekTime
+  tick: r_tick
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Simulator);

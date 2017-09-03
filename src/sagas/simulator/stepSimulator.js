@@ -12,6 +12,5 @@ export default function* stepSimulator({ next }) {
   const currentTime = yield select(getSimulatorTime);
 
   const newTime = next ? Math.min(currentTime + sensorInterval, maxTime) : Math.max(currentTime - sensorInterval, 0);
-  console.log(newTime);
   yield put(s_setTime(newTime));
 }
