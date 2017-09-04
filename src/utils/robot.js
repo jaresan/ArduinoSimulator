@@ -72,7 +72,11 @@ function moveRobot(robot, moveDuration) {
     newX = x + r * Math.sin(Math.PI / 180 * (wd + robot.get('rotation'))) - r * Math.sin(Math.PI / 180 * robot.get('rotation'));
     newY = y - r * Math.cos(Math.PI / 180 * (wd + robot.get('rotation'))) + r * Math.cos(Math.PI / 180 * robot.get('rotation'));
 
-    robot = robot.set('rotation', robot.get('rotation') + wd);
+    let newRotation = (robot.get('rotation') + wd) % 360;
+    if (newRotation < 0) {
+      newRotation = 360 + newRotation;
+    }
+    robot = robot.set('rotation', newRotation);
   } else {
     newX = x + (leftDelta * Math.cos(Math.PI / 180 * robot.get('rotation')));
     newY = y + (rightDelta * Math.sin(Math.PI / 180 * robot.get('rotation')));

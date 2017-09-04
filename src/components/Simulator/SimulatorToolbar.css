@@ -5,6 +5,28 @@
   bottom: 16px;
   left: 5%;
 }
+.SimulatorToolbar .positionInfo {
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+}
+.SimulatorToolbar .positionInfo .positionInfoRow {
+  display: inline-table;
+  margin-right: 8px;
+}
+.SimulatorToolbar .positionInfo .positionInfoRow:last-child {
+  margin-right: 0;
+}
+.SimulatorToolbar .positionInfo .positionInput {
+  width: 45px;
+  margin-left: 4px;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+.SimulatorToolbar .positionInfo .positionInput::-webkit-outer-spin-button,
+.SimulatorToolbar .positionInfo .positionInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
 .SimulatorToolbar .sensorReadings {
   position: absolute;
   bottom: 4px;

@@ -30,9 +30,27 @@ class SimulatorToolbar extends Component {
   }
 
   renderPositionInfo() {
-    // const robot = this.props.robot;
+    const robot = this.props.robot;
 
-    return <div className="positionInfo"/>;
+    const getTableRow = (name, query, editable) => {
+      return (
+        <tr className="positionInfoRow">
+          <td>{`${name}:`}</td>
+          <td><input className="positionInput" readOnly={!editable} type="number" value={robot.getIn(query)}/></td>
+        </tr>
+      );
+    };
+
+    return (
+      <table className="positionInfo">
+        <tbody>
+          {
+            [['x', ['position', 'x']], ['y', ['position', 'y']], ['r', ['rotation'], true]]
+              .map(params => getTableRow(...params))
+          }
+        </tbody>
+      </table>
+    );
   }
 
 

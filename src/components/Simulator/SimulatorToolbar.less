@@ -5,6 +5,34 @@
   bottom: 16px;
   left: 5%;
 
+  .positionInfo {
+    position: absolute;
+    right: 0;
+    bottom: 4px;
+
+    .positionInfoRow {
+      display: inline-table;
+      margin-right: 8px;
+
+      &:last-child
+      {
+        margin-right: 0;
+      }
+    }
+
+    .positionInput {
+      width: 45px;
+      margin-left: 4px;
+      text-align: center;
+
+      -moz-appearance:textfield;
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+    }
+  }
+
   .sensorReadings {
     position: absolute;
     bottom: 4px;
