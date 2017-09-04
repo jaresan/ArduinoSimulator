@@ -25,7 +25,7 @@ class CodeEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      code: props.code || DEFAULT_CODE
+      code: props.code || localStorage.getItem('arduinoSimulatorCode') || DEFAULT_CODE
     };
   }
 
@@ -45,7 +45,7 @@ class CodeEditor extends Component {
   }
 
   onSaveCode() {
-    // FIXME: Somehow use cookie to save the code on the server and present it on reload
+    localStorage.setItem('arduinoSimulatorCode', this.state.code);
     this.props.saveCode(this.state.code);
   }
 
