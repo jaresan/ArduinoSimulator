@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
+import Tracks from 'assets/images.js';
 import { getInternalState } from 'selectors/robotSelectors';
 
 import CodeEditor from './CodeEditor/CodeEditor';
@@ -17,6 +18,7 @@ class RobotIDE extends Component {
           <TabList>
             <Tab>Code Editor</Tab>
             <Tab>Robot memory</Tab>
+            <Tab>Track selection</Tab>
           </TabList>
 
           <TabPanel>
@@ -24,6 +26,9 @@ class RobotIDE extends Component {
           </TabPanel>
           <TabPanel>
             <RobotInternalState robotState={this.props.robotState}/>
+          </TabPanel>
+          <TabPanel>
+            {Object.values(Tracks).map(data => <img style={{width: 128, height: 128}} src={data[0]} onClick={() => this.props.onTrackSelect(data)}/>)}
           </TabPanel>
         </Tabs>
       </div>
