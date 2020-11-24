@@ -10,26 +10,26 @@ import { getHistory, getSimulatorTime, getLoading } from 'selectors/simulatorSel
 
 import Canvas from './Canvas';
 import SimulatorToolbar from './SimulatorToolbar';
-import Track from 'assets/track.png';
 import './Simulator.css';
 
 class Simulator extends Component {
-  componentWillMount() {
-    this.loadImage();
-  }
-
-  loadImage() {
-    const getResizedImage = (src, realWorldWidth, realWorldHeight) => {
-      const img = new Image();
-      img.onload = () => {
-        this.props.loadImage({img, realWorldWidth, realWorldHeight});
-      };
-
-      img.src = src;
+  loadImage([src, realWorldWidth, realWorldHeight]) {
+    const img = new Image();
+    img.onload = () => {
+      this.props.loadImage({img, realWorldWidth, realWorldHeight});
     };
 
-    // FIXME: Add params dynamically
-    getResizedImage(Track, 0.841, 1.189);
+    img.src = src;
+  }
+
+  componentDidMount() {
+    this.loadImage(this.props.track);
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.track !== this.props.track) {
+      this.loadImage(this.props.track);
+    }
   }
 
   getCanvas() {
