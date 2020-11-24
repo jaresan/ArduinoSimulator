@@ -22,8 +22,12 @@ class Canvas extends Component {
     this.updateCanvas();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     this.updateCanvas();
+    if (prevProps.field !== this.props.field) {
+      const ctx = this.trackCanvas.getContext('2d');
+      this.drawTrack(ctx);
+    }
   }
 
   drawTrack(ctx) {
