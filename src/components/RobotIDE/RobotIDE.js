@@ -28,7 +28,13 @@ class RobotIDE extends Component {
             <RobotInternalState robotState={this.props.robotState}/>
           </TabPanel>
           <TabPanel>
-            {Object.values(Tracks).map(data => <img style={{width: 128, height: 128}} src={data[0]} onClick={() => this.props.onTrackSelect(data)}/>)}
+            {
+              Object.values(Tracks).map(data => <img
+                style={{border: 'solid 1px black', width: 128, height: 128, cursor: 'pointer'}}
+                src={data[0]}
+                onClick={() => this.props.onTrackSelect(data)}
+              />)
+            }
           </TabPanel>
         </Tabs>
       </div>
