@@ -21,10 +21,7 @@ class App extends Component {
       <div className="App">
         {/*<Routes />*/}
         <Simulator track={this.state.track}/>
-        <RobotIDE/>
-        <div style={{position: 'absolute', bottom: 0}}>
-          {Object.values(Tracks).map(data => <img style={{width: 128, height: 128}} src={data[0]} onClick={() => this.setTrack(data)}/>)}
-        </div>
+        <RobotIDE onTrackSelect={data => this.setTrack(data)}/>
       </div>
     );
   }
