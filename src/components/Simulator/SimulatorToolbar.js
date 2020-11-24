@@ -8,7 +8,9 @@ import {
   s_stepPrevious,
   s_stopSimulator
 } from 'actions/simulatorActions';
+import {r_setPosition} from 'actions/robotActions';
 
+import {getWorld} from 'selectors';
 import { getLoading } from 'selectors/simulatorSelectors';
 
 import SimulatorControls from './SimulatorControls';
@@ -30,24 +32,27 @@ class SimulatorToolbar extends Component {
   }
 
   renderPositionInfo() {
-    const robot = this.props.robot;
+    const {robot, setPosition, world} = this.props;
 
-    const getTableRow = (name, query, editable) => {
-      return (
-        <tr className="positionInfoRow">
-          <td>{`${name}:`}</td>
-          <td><input className="positionInput" readOnly={!editable} type="number" value={robot.getIn(query)}/></td>
-        </tr>
-      );
-    };
-
+    const unwrap = e => e.target.value;
+    const {position: {x, y}, rotation} = robot.toJS();
+    const payload = {x, y, r: rotation};
+    const onChange = key => e => setPosition({...payload, [key]: parseFloat(unwrap(e)), pixels: world.get('pixels')});
     return (
       <table className="positionInfo">
         <tbody>
-          {
-            [['x', ['position', 'x']], ['y', ['position', 'y']], ['r', ['rotation'], true]]
-              .map(params => getTableRow(...params))
-          }
+          <tr className="positionInfoRow">
+            <td>x:</td>
+            <td><input className="positionInput" type="number" value={x} onChange={onChange('x')}/></td>
+          </tr>
+          <tr className="positionInfoRow">
+            <td>y:</td>
+            <td><input className="positionInput" type="number" value={y} onChange={onChange('y')}/></td>
+          </tr>
+          <tr className="positionInfoRow">
+            <td>r:</td>
+            <td><input className="positionInput" type="number" value={rotation} onChange={onChange('r')}/></td>
+          </tr>
         </tbody>
       </table>
     );
@@ -76,7 +81,8 @@ class SimulatorToolbar extends Component {
 }
 
 const mapStateToProps = appState => ({
-  loading: getLoading(appState)
+  loading: getLoading(appState),
+  world: getWorld(appState)
 });
 
 const mapDispatchToProps = {
@@ -85,7 +91,8 @@ const mapDispatchToProps = {
   pauseSimulator: s_pauseSimulator,
   stepNext: s_stepNext,
   stepPrevious: s_stepPrevious,
-  seekTime: s_seekTime
+  seekTime: s_seekTime,
+  setPosition: r_setPosition
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SimulatorToolbar);
