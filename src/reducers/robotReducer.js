@@ -1,9 +1,9 @@
 import { fromJS } from 'immutable';
-import { r_tick, r_resetRobot, r_setup, r_setRobotState } from 'actions/robotActions';
+import { r_tick, r_resetRobot, r_setup, r_setRobotState, r_setPosition } from 'actions/robotActions';
 import { ROBOT_PARAMS } from 'constants/robot';
 import Robot from 'utils/robot';
 
-export const initialState = fromJS({
+export let initialState = fromJS({
   memory: {},
   ...ROBOT_PARAMS,
   sensorPositions: Robot.getSensorPositions(fromJS(ROBOT_PARAMS))
@@ -23,6 +23,19 @@ export default (state = initialState, action) => {
       state = Robot.updateSensors(state, field);
       state = Robot.applyBehavior(state, behavior);
       return Robot.moveRobot(state, duration || state.get('sensorInterval'));
+    }
+
+    case r_setPosition.type: {
+      const {x, y, r, pixels} = payload;
+      // Change initial state so subsequent resets keep the position chosen
+      initialState = initialState
+        .set('rotation', r)
+        .set('position', fromJS({x, y}));
+      initialState = Robot.updateSensors(initialState, pixels);
+      const newState = state
+        .set('rotation', r)
+        .set('position', fromJS({x, y}));
+      return Robot.updateSensors(newState, pixels);
     }
 
     case r_resetRobot.type: {

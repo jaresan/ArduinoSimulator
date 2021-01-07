@@ -11,6 +11,8 @@ import { getHistory, getSimulatorTime, getLoading } from 'selectors/simulatorSel
 import Canvas from './Canvas';
 import SimulatorToolbar from './SimulatorToolbar';
 import './Simulator.css';
+import { r_clearHistory } from '../../actions/simulatorActions';
+import { r_resetRobot } from '../../actions/robotActions';
 
 class Simulator extends Component {
   loadImage([src, realWorldWidth, realWorldHeight]) {
@@ -20,6 +22,8 @@ class Simulator extends Component {
     };
 
     img.src = src;
+    this.props.clearSimulator();
+    this.props.resetRobot();
   }
 
   componentDidMount() {
@@ -105,6 +109,8 @@ const mapStateToProps = appState => ({
 
 const mapDispatchToProps = {
   loadImage: s_loadImage,
+  resetRobot: r_resetRobot,
+  clearSimulator: r_clearHistory,
   tick: r_tick
 };
 

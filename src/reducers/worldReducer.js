@@ -61,7 +61,6 @@ export default (state = initialState, action) => {
   switch (type) {
     case r_setImageData.type: {
       const {width, height, pixels} = payload;
-      console.log(pixels);
 
       const field = [];
       for (let i = 0; i < width; i++) {
